@@ -1,0 +1,1283 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boston Dynamics - 라이브 커뮤니티 게시판</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-color: #050505;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.6);
+            --accent-yellow: #f7d100;
+            --accent-red: #ff4a4a;
+            --font-main: 'Inter', 'Noto Sans KR', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        *:focus-visible {
+            outline: 2px solid var(--accent-yellow) !important;
+            outline-offset: 2px;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: var(--font-main);
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #000;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #222;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-yellow);
+        }
+
+        /* Header Navigation */
+        .nav-brutal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 80px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 4rem;
+            background: rgba(5, 5, 5, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--card-border);
+            z-index: 1000;
+        }
+
+        .logo {
+            text-decoration: none;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+        .logo:hover {
+            transform: scale(1.02);
+        }
+
+        .back-home-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            color: var(--accent-yellow);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1rem;
+            border: 1px solid var(--accent-yellow);
+            padding: 0.6rem 1.4rem;
+            border-radius: 6px;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            background: transparent;
+        }
+        .back-home-btn:hover {
+            background: var(--accent-yellow);
+            color: #000;
+            box-shadow: 0 0 15px rgba(247, 209, 0, 0.4);
+            transform: translateY(-2px);
+        }
+
+        /* Container Section */
+        .board-container {
+            flex: 1;
+            max-width: 1400px;
+            width: 100%;
+            margin: 140px auto 60px;
+            padding: 0 4rem;
+            display: grid;
+            grid-template-columns: 1.25fr 1.55fr; /* 좌측 글쓰기 비율 대폭 상향 */
+            gap: 3.5rem;
+        }
+
+        /* Left Side: Write Form */
+        .write-panel {
+            position: sticky;
+            top: 120px;
+            height: fit-content;
+        }
+
+        .write-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 3.2rem; /* 카드 내 패딩 확장 */
+            backdrop-filter: blur(12px);
+        }
+
+        .panel-title {
+            font-size: 2rem; /* 폰트 확대 */
+            font-weight: 900;
+            margin-bottom: 0.6rem;
+            background: linear-gradient(135deg, #fff, rgba(255,255,255,0.7));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .panel-subtitle {
+            font-size: 1rem; /* 폰트 확대 */
+            color: var(--text-secondary);
+            margin-bottom: 2.2rem;
+            line-height: 1.6;
+        }
+
+        .form-group {
+            margin-bottom: 1.8rem;
+            position: relative;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.95rem; /* 폰트 확대 */
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            color: var(--accent-yellow);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-control {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 1.1rem 1.3rem; /* 입력 박스 세로/가로 확장 */
+            color: var(--text-primary);
+            font-family: var(--font-main);
+            font-size: 1.05rem; /* 인풋 폰트 크기 확대 */
+            transition: all 0.3s ease;
+        }
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent-yellow);
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 0 10px rgba(247, 209, 0, 0.1);
+        }
+
+        textarea.form-control {
+            resize: none;
+            height: 250px; /* 본문 텍스트 에어리어 높이 대폭 확장 */
+            line-height: 1.7;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: var(--accent-yellow);
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            padding: 1.1rem;
+            font-size: 1.05rem;
+            font-weight: 900;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+            margin-top: 2rem;
+        }
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 25px rgba(247, 209, 0, 0.5);
+            background: #fff;
+        }
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Right Side: Feed List */
+        .feed-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 1.8rem;
+        }
+
+        .feed-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .feed-count {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        .feed-count span {
+            color: var(--accent-yellow);
+        }
+
+        /* Sort Switch Styles */
+        .feed-sort-group {
+            display: flex;
+            gap: 0.6rem;
+            align-items: center;
+        }
+
+        .sort-btn {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            font-weight: 700;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .sort-btn:hover {
+            color: #fff;
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        .sort-btn.active {
+            background: rgba(247, 209, 0, 0.1);
+            color: var(--accent-yellow);
+            border-color: var(--accent-yellow);
+            box-shadow: 0 0 10px rgba(247, 209, 0, 0.1);
+        }
+
+        /* Empty state styling */
+        .empty-feed {
+            background: var(--card-bg);
+            border: 1px dashed var(--card-border);
+            border-radius: 16px;
+            padding: 5rem 2rem;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+        }
+        .empty-icon {
+            font-size: 3.5rem;
+            color: rgba(255,255,255,0.15);
+            animation: pulse 2s infinite;
+        }
+        .empty-text {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.5; }
+        }
+
+        /* Feed Card Item */
+        .post-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 2.2rem;
+            position: relative;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s ease, border-color 0.3s ease;
+            overflow: hidden;
+            animation: slideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        .post-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--accent-yellow);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .post-card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        .post-card:hover::before {
+            opacity: 1;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .post-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.2rem;
+        }
+
+        .post-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .post-author-avatar {
+            width: 40px;
+            height: 40px;
+            background: rgba(247, 209, 0, 0.1);
+            border: 1.5px solid var(--accent-yellow);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-yellow);
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .post-meta-text {
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+        }
+
+        .post-author {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .post-date {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .post-actions {
+            display: flex;
+            gap: 0.8rem;
+        }
+
+        .action-btn {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-secondary);
+            border-radius: 6px;
+            padding: 0.5rem 0.8rem;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .action-btn:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .action-btn.like-btn.liked {
+            color: var(--accent-yellow);
+            border-color: var(--accent-yellow);
+            background: rgba(247, 209, 0, 0.05);
+        }
+
+        .action-btn.delete-btn:hover {
+            color: var(--accent-red);
+            border-color: var(--accent-red);
+            background: rgba(255, 74, 74, 0.05);
+        }
+
+        .post-title {
+            font-size: 1.35rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            color: #fff;
+            line-height: 1.4;
+        }
+
+        .post-content {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            word-break: break-all;
+            white-space: pre-line;
+            margin-bottom: 1.2rem;
+        }
+
+        /* Reply Section */
+        .reply-section {
+            margin-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            padding-top: 1.2rem;
+        }
+
+        .reply-toggle-btn {
+            background: transparent;
+            border: none;
+            color: var(--accent-yellow);
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.2rem 0;
+            transition: color 0.3s ease;
+        }
+        .reply-toggle-btn:hover {
+            color: #fff;
+        }
+
+        .reply-header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .reply-write-btn {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            font-weight: 700;
+            padding: 0.35rem 0.85rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .reply-write-btn:hover {
+            color: var(--accent-yellow);
+            border-color: var(--accent-yellow);
+            background: rgba(247, 209, 0, 0.05);
+            transform: translateY(-1px);
+        }
+        .reply-write-btn:active {
+            transform: translateY(0);
+        }
+        .reply-write-btn.active {
+            color: #000;
+            background: var(--accent-yellow);
+            border-color: var(--accent-yellow);
+            box-shadow: 0 0 10px rgba(247, 209, 0, 0.2);
+        }
+
+        .reply-box {
+            display: none; /* JS로 토글 */
+            margin-top: 1.2rem;
+            animation: replyFadeIn 0.3s ease forwards;
+        }
+
+        @keyframes replyFadeIn {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .reply-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 0.5rem;
+        }
+
+        .reply-list:empty {
+            display: none !important;
+            margin-bottom: 0 !important;
+        }
+
+
+
+        .no-replies-message {
+            padding: 1.5rem;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.01);
+            border: 1px dashed rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            animation: replyFadeIn 0.3s ease;
+        }
+        .no-replies-message i {
+            color: var(--accent-yellow);
+            font-size: 1.05rem;
+        }
+
+        .reply-item {
+            background: rgba(255, 255, 255, 0.015);
+            border-left: 2px solid var(--accent-yellow);
+            padding: 1rem 1.2rem;
+            border-radius: 0 8px 8px 0;
+            position: relative;
+        }
+
+        .reply-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .reply-meta {
+            display: flex;
+            align-items: center;
+        }
+
+        .reply-author {
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: #fff;
+        }
+
+        .reply-date {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-left: 0.8rem;
+        }
+
+        .reply-content {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.5;
+            word-break: break-all;
+            white-space: pre-line;
+        }
+
+        .reply-delete-btn {
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.2rem;
+        }
+        .reply-delete-btn:hover {
+            color: var(--accent-red);
+        }
+
+        /* Reply Input Form */
+        .reply-form {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            margin-top: 1.2rem;
+            background: rgba(255, 255, 255, 0.01);
+            padding: 1.2rem;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .reply-form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.8rem;
+        }
+
+        .reply-control {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            padding: 0.7rem 0.9rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-family: var(--font-main);
+            width: 100%;
+            transition: border-color 0.3s ease;
+        }
+        .reply-control:focus {
+            outline: none;
+            border-color: var(--accent-yellow);
+        }
+
+        .reply-submit-row {
+            display: grid;
+            grid-template-columns: 1.5fr auto;
+            gap: 0.8rem;
+            align-items: center;
+        }
+
+        .reply-submit-btn {
+            background: var(--accent-yellow);
+            color: #000;
+            border: none;
+            font-weight: 900;
+            padding: 0.7rem 1.4rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .reply-submit-btn:hover {
+            background: #fff;
+            box-shadow: 0 0 12px rgba(247, 209, 0, 0.4);
+        }
+
+        /* Compact Footer */
+        .footer-compact {
+            padding: 4rem;
+            border-top: 1px solid var(--card-border);
+            background: #000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin-top: auto;
+        }
+
+        .footer-socials {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+        .footer-icon {
+            width: 22px;
+            height: 22px;
+            fill: var(--accent-yellow);
+            transition: fill 0.3s ease, transform 0.3s ease;
+        }
+        .footer-icon:hover {
+            fill: #ffffff;
+            transform: scale(1.15);
+        }
+
+        .footer-copyright {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .footer-policies {
+            display: flex;
+            gap: 2.2rem;
+            align-items: center;
+        }
+        .footer-policies span {
+            color: var(--accent-yellow);
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: default;
+            user-select: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .board-container {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+                padding: 0 2rem;
+            }
+            .write-panel {
+                position: relative;
+                top: 0;
+            }
+            .nav-brutal {
+                padding: 0 2rem;
+            }
+            .footer-compact {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                padding: 3rem 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <nav class="nav-brutal">
+        <a href="index.html" class="logo">
+            <svg viewBox="0 0 300 40" fill="none" xmlns="http://www.w3.org/2000/svg" class="bd-logo" style="width: 250px; height: 40px;">
+                <g fill="white">
+                    <path d="M10 24 L14 13 L26 13 L31 18 L28 22 L16 22 Z" />
+                    <path d="M27 22 L29 32 H27 L25 22 Z" />
+                    <path d="M24 22 L22 32 H20 L22 22 Z" opacity="0.6" />
+                    <path d="M16 22 L14 32 H12 L14 22 Z" />
+                    <path d="M13 22 L11 32 H9 L11 22 Z" opacity="0.6" />
+                    <circle cx="29" cy="16" r="1.5" fill="black" />
+                </g>
+                <text x="45" y="28" fill="white" font-family="'Noto Sans KR', sans-serif" font-weight="900" font-size="20" letter-spacing="-0.5">BOSTON DYNAMICS</text>
+            </svg>
+        </a>
+        <a href="index.html" class="back-home-btn">
+            <i class="fa-solid fa-arrow-left"></i> 메인 홈으로 돌아가기
+        </a>
+    </nav>
+
+    <!-- Main Container -->
+    <main class="board-container">
+        
+        <!-- Left Column: Writing Board -->
+        <section class="write-panel">
+            <div class="write-card">
+                <h1 class="panel-title">실시간 라이브 피드</h1>
+                <p class="panel-subtitle">Boston Dynamics 자율 주행 기술 도입 검토 및 현장 피드백을 자유롭게 작성해 주세요.</p>
+                
+                <form id="postForm">
+                    <div class="form-group">
+                        <label class="form-label" for="authorInput">작성자 / 기업명</label>
+                        <input type="text" id="authorInput" class="form-control" placeholder="예: 홍길동 / 테크솔루션" required maxlength="15">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="titleInput">주제 / 피드백 제목</label>
+                        <input type="text" id="titleInput" class="form-control" placeholder="게시글 제목을 작성해 주세요" required maxlength="40">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="contentInput">내용</label>
+                        <textarea id="contentInput" class="form-control" placeholder="여기에 자율 작업 로봇 도입 피드백 및 토론 주제를 작성해 주세요." required maxlength="500"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="passwordInput">삭제용 암호 (4자리 이상)</label>
+                        <input type="password" id="passwordInput" class="form-control" placeholder="비밀번호를 입력하세요 (삭제 시 사용)" required minlength="4" maxlength="20">
+                    </div>
+                    <button type="submit" class="submit-btn">
+                        <i class="fa-solid fa-paper-plane"></i> 피드 등록하기
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Right Column: Live Feed Area -->
+        <section class="feed-panel">
+            <div class="feed-header">
+                <h2 class="feed-count">라이브 피드 스레드 (총 <span id="postCount">0</span>개)</h2>
+                
+                <!-- Sort filter switches -->
+                <div class="feed-sort-group">
+                    <button class="sort-btn active" id="sort-latest-btn" onclick="changeSort('latest')">최신순</button>
+                    <button class="sort-btn" id="sort-likes-btn" onclick="changeSort('likes')">추천순</button>
+                </div>
+            </div>
+            
+            <div id="feedList">
+                <!-- Posts will be rendered dynamically here -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Compact Footer -->
+    <footer class="footer-compact">
+        <!-- Left Social Media Icons -->
+        <div class="footer-socials">
+            <a href="https://www.facebook.com/BostonDynamicsOfficial" target="_blank" aria-label="Facebook">
+                <svg viewBox="0 0 24 24" class="footer-icon"><path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/></svg>
+            </a>
+            <a href="https://www.instagram.com/bostondynamicsofficial/?hl=en" target="_blank" aria-label="Instagram">
+                <svg viewBox="0 0 24 24" class="footer-icon"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            </a>
+            <a href="https://www.youtube.com/user/BostonDynamics" target="_blank" aria-label="YouTube">
+                <svg viewBox="0 0 24 24" class="footer-icon"><path d="M23.498 6.163c-.272-1.016-1.07-1.815-2.085-2.087-1.839-.494-9.413-.494-9.413-.494s-7.574 0-9.413.494c-1.015.272-1.813 1.071-2.085 2.087-.494 1.838-.494 5.679-.494 5.679s0 3.842.494 5.679c.272 1.016 1.07 1.815 2.085 2.087 1.839.493 9.413.493 9.413.493s7.574 0 9.413-.493c1.015-.272 1.813-1.071 2.085-2.087.494-1.837.494-5.679.494-5.679s0-3.841-.494-5.679zm-14.165 9.493v-9.303l6.4 4.662-6.4 4.641z"/></svg>
+            </a>
+            <a href="https://twitter.com/BostonDynamics" target="_blank" aria-label="Twitter">
+                <svg viewBox="0 0 24 24" class="footer-icon"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            </a>
+            <a href="https://www.linkedin.com/company/boston-dynamics/" target="_blank" aria-label="LinkedIn">
+                <svg viewBox="0 0 24 24" class="footer-icon"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+            </a>
+            <a href="https://www.tiktok.com/@bostondynamicsofficial" target="_blank" aria-label="TikTok">
+                <svg viewBox="0 0 24 24" class="footer-icon"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.01 1.62 4.15.94.95 2.23 1.51 3.54 1.67v3.74c-1.78-.11-3.43-.88-4.66-2.18-.02 3.32-.01 6.64-.02 9.96-.05 1.74-.63 3.49-1.79 4.79-1.42 1.64-3.66 2.58-5.83 2.43-2.61-.13-5.06-1.79-6.07-4.21-1.34-3.08-.26-6.95 2.57-8.77 1.48-.95 3.26-1.35 4.97-1.1v3.7c-1.34-.35-2.88.08-3.79 1.13-.91.99-1.12 2.49-.52 3.73.57 1.25 1.95 2.05 3.32 1.96 1.41-.05 2.68-1.07 2.94-2.48.08-1.11.04-8.71.04-9.82.02-2.22.01-4.43.02-6.65z"/></svg>
+            </a>
+        </div>
+        
+        <!-- Middle Copyright -->
+        <div class="footer-copyright">
+            &copy; 2026 Boston Dynamics. All rights reserved.
+        </div>
+        
+        <!-- Right Policies -->
+        <div class="footer-policies">
+            <span>개인정보처리방침</span>
+            <span>이용약관</span>
+            <span>고객지원</span>
+        </div>
+    </footer>
+
+    <!-- Board JavaScript Logic (Firebase Realtime Integration) -->
+    <script type="module">
+        // 1. Firebase Modules CDN Import
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { 
+            getFirestore, 
+            collection, 
+            addDoc, 
+            onSnapshot, 
+            doc, 
+            updateDoc, 
+            deleteDoc,
+            arrayUnion,
+            arrayRemove,
+            getDoc 
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // 2. Firebase Config provided by User
+        const firebaseConfig = {
+            apiKey: "AIzaSyAVJAbQr9aHuS_6WgS-ogtIeG_dQd3QCno",
+            authDomain: "company-web-550c5.firebaseapp.com",
+            projectId: "company-web-550c5",
+            storageBucket: "company-web-550c5.firebasestorage.app",
+            messagingSenderId: "1029378794087",
+            appId: "1:1029378794087:web:b0f597b3aa778e5c4b6ac2",
+            measurementId: "G-W11YMP4BM7"
+        };
+
+        // 3. Initialize Firebase & Firestore
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const postsCol = collection(db, "posts");
+
+        let posts = []; // Local mirror of Firestore posts
+        let currentSort = 'latest';
+
+        const postForm = document.getElementById('postForm');
+        const feedList = document.getElementById('feedList');
+        const postCountElement = document.getElementById('postCount');
+
+        // Helper to format date
+        function getCurrentDateTime() {
+            const now = new Date();
+            const yyyy = now.getFullYear();
+            const mm = String(now.getMonth() + 1).padStart(2, '0');
+            const dd = String(now.getDate()).padStart(2, '0');
+            const hh = String(now.getHours()).padStart(2, '0');
+            const min = String(now.getMinutes()).padStart(2, '0');
+            return `${yyyy}.${mm}.${dd} ${hh}:${min}`;
+        }
+
+        // --- [READ] Live Real-time Firestore Sync ---
+        onSnapshot(postsCol, (snapshot) => {
+            posts = [];
+            snapshot.forEach((doc) => {
+                posts.push({
+                    firestoreId: doc.id,
+                    ...doc.data()
+                });
+            });
+            renderPosts();
+        }, (error) => {
+            console.error("Firestore sync error:", error);
+        });
+
+        // Render Posts with Targeted/In-place Updates to prevent flickering/shaking and preserve reply box state
+        function renderPosts() {
+            // Update total count indicator
+            postCountElement.textContent = posts.length;
+
+            if (posts.length === 0) {
+                feedList.innerHTML = `
+                    <div class="empty-feed">
+                        <i class="fa-solid fa-comments empty-icon"></i>
+                        <p class="empty-text">등록된 라이브 피드가 없습니다.<br>첫 번째 유익한 피드백을 남겨주세요!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Remove empty-feed if it's there
+            const emptyFeed = feedList.querySelector('.empty-feed');
+            if (emptyFeed) emptyFeed.remove();
+
+            // [Sorting Rule for Main Feed]
+            let sortedPosts = [];
+            if (currentSort === 'likes') {
+                sortedPosts = [...posts].sort((a, b) => {
+                    if (b.likes !== a.likes) {
+                        return b.likes - a.likes;
+                    }
+                    return b.createdAt - a.createdAt;
+                });
+            } else {
+                sortedPosts = [...posts].sort((a, b) => b.createdAt - a.createdAt);
+            }
+
+            // Track IDs present in current list to remove deleted ones
+            const activeIds = new Set(sortedPosts.map(p => `post-${p.firestoreId}`));
+
+            // Remove any card elements that were deleted from the database
+            Array.from(feedList.children).forEach(child => {
+                if (child.id && child.id.startsWith('post-') && !activeIds.has(child.id)) {
+                    child.remove();
+                }
+            });
+
+            // Update or insert each post card dynamically
+            sortedPosts.forEach((post, index) => {
+                const cardId = `post-${post.firestoreId}`;
+                let postCard = document.getElementById(cardId);
+                
+                const initial = post.author.charAt(0);
+                const isLiked = post.liked ? 'liked' : '';
+                const likeIcon = post.liked ? 'fa-solid' : 'fa-regular';
+                const repliesCount = post.replies ? post.replies.length : 0;
+
+                // Build Reply HTML list (Latest comments on top)
+                let repliesHtml = '';
+                if (post.replies && post.replies.length > 0) {
+                    const sortedReplies = [...post.replies].reverse();
+                    sortedReplies.forEach(reply => {
+                        repliesHtml += `
+                            <div class="reply-item">
+                                <div class="reply-item-header">
+                                    <div class="reply-meta">
+                                        <span class="reply-author">${reply.author}</span>
+                                        <span class="reply-date">${reply.date}</span>
+                                    </div>
+                                    <button class="reply-delete-btn" onclick="deleteReply('${post.firestoreId}', '${reply.id}')">
+                                        <i class="fa-regular fa-trash-can"></i> 삭제
+                                    </button>
+                                </div>
+                                <p class="reply-content">${reply.content}</p>
+                            </div>
+                        `;
+                    });
+                } else {
+                    repliesHtml = `
+                        <div class="no-replies-message">
+                            <i class="fa-regular fa-comments"></i> 등록된 답글이 없습니다.
+                        </div>
+                    `;
+                }
+
+                if (!postCard) {
+                    // [1. NEW CARD: Create & Add Slide-In Animation]
+                    postCard = document.createElement('article');
+                    postCard.className = 'post-card';
+                    postCard.id = cardId;
+                    
+                    // Only apply slide-in animation when the card is freshly inserted
+                    postCard.style.animation = 'slideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards';
+
+                    postCard.innerHTML = `
+                        <div class="post-header">
+                            <div class="post-meta">
+                                <div class="post-author-avatar">${initial}</div>
+                                <div class="post-meta-text">
+                                    <span class="post-author">${post.author}</span>
+                                    <span class="post-date">${post.date}</span>
+                                </div>
+                            </div>
+                            <div class="post-actions">
+                                <button class="action-btn like-btn ${isLiked}" onclick="toggleLike(event, '${post.firestoreId}')">
+                                    <i class="${likeIcon} fa-heart"></i> <span class="like-info">추천 <span class="like-num">${post.likes}</span></span>
+                                </button>
+                                <button class="action-btn delete-btn" onclick="deletePost('${post.firestoreId}')">
+                                    <i class="fa-regular fa-trash-can"></i> 삭제
+                                </button>
+                            </div>
+                        </div>
+                        <h3 class="post-title">${post.title}</h3>
+                        <p class="post-content">${post.content}</p>
+
+                        <!-- Reply Section -->
+                        <div class="reply-section">
+                            <div class="reply-header-actions">
+                                <button class="reply-toggle-btn" onclick="toggleReplyBox('${post.firestoreId}')">
+                                    <i class="fa-regular fa-comment-dots"></i>
+                                    <span>답글 <span id="reply-count-${post.firestoreId}">${repliesCount}</span>개</span>
+                                </button>
+                                <button class="reply-write-btn" onclick="toggleReplyForm('${post.firestoreId}')">
+                                    <i class="fa-regular fa-pen-to-square"></i> 답글달기
+                                </button>
+                            </div>
+                            
+                            <div class="reply-box" id="reply-box-${post.firestoreId}">
+                                <div class="reply-list" id="reply-list-${post.firestoreId}">${repliesHtml}</div>
+                                
+                                <form class="reply-form" id="reply-form-${post.firestoreId}" onsubmit="addReply(event, '${post.firestoreId}')" style="display: none;">
+                                    <div class="reply-form-row">
+                                        <input type="text" placeholder="이름/기업명" class="reply-control reply-author-input" required maxlength="15">
+                                        <input type="password" placeholder="비밀번호 (4자 이상)" class="reply-control reply-password-input" required minlength="4" maxlength="20">
+                                    </div>
+                                    <div class="reply-submit-row">
+                                        <input type="text" placeholder="답글 내용을 남겨주세요" class="reply-control reply-content-input" required maxlength="300">
+                                        <button type="submit" class="reply-submit-btn">
+                                            <i class="fa-solid fa-reply"></i> 등록
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    // [2. EXISTING CARD: Targeted In-place Sync (No shaking, keeps state!)]
+                    // Remove initial slideIn animation so sorting/moving doesn't trigger a visual jump
+                    postCard.style.animation = 'none';
+
+                    // Update like button active state, icon and counts
+                    const likeBtn = postCard.querySelector('.like-btn');
+                    if (likeBtn) {
+                        likeBtn.className = `action-btn like-btn ${isLiked}`;
+                        const likeIconEl = likeBtn.querySelector('i');
+                        if (likeIconEl) likeIconEl.className = `${likeIcon} fa-heart`;
+                        const likeNum = likeBtn.querySelector('.like-num');
+                        if (likeNum) likeNum.textContent = post.likes;
+                    }
+
+                    // Update replies count badge
+                    const replyCountSpan = postCard.querySelector(`#reply-count-${post.firestoreId}`);
+                    if (replyCountSpan) replyCountSpan.textContent = repliesCount;
+
+                    // Update comment list inner HTML
+                    const replyList = postCard.querySelector(`#reply-list-${post.firestoreId}`);
+                    if (replyList) {
+                        replyList.innerHTML = repliesHtml;
+                    }
+                }
+
+                // Maintain sorting order visually by placing/moving the card to the correct DOM index position
+                if (feedList.children[index] !== postCard) {
+                    feedList.insertBefore(postCard, feedList.children[index]);
+                }
+            });
+        }
+
+        // --- [CREATE] Add Post ---
+        postForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const author = document.getElementById('authorInput').value.trim();
+            const title = document.getElementById('titleInput').value.trim();
+            const content = document.getElementById('contentInput').value.trim();
+            const password = document.getElementById('passwordInput').value.trim();
+
+            if (!author || !title || !content || !password) return;
+
+            try {
+                await addDoc(postsCol, {
+                    createdAt: Date.now(),
+                    author,
+                    title,
+                    content,
+                    password,
+                    date: getCurrentDateTime(),
+                    likes: 0,
+                    liked: false,
+                    replies: []
+                });
+                
+                postForm.reset();
+            } catch (err) {
+                console.error("Error adding document: ", err);
+                alert("피드 등록 중 실패했습니다: " + err.message);
+            }
+        });
+
+        // --- [UPDATE] Toggle Like (Direct Cloud Update) ---
+        window.toggleLike = async function(event, firestoreId) {
+            event.stopPropagation();
+
+            try {
+                const postRef = doc(db, "posts", firestoreId);
+                const postSnap = await getDoc(postRef);
+
+                if (postSnap.exists()) {
+                    const data = postSnap.data();
+                    const nextLiked = !data.liked;
+                    const nextLikes = nextLiked ? data.likes + 1 : Math.max(0, data.likes - 1);
+
+                    await updateDoc(postRef, {
+                        liked: nextLiked,
+                        likes: nextLikes
+                    });
+                }
+            } catch (err) {
+                console.error("Error toggling like: ", err);
+            }
+        };
+
+        // --- [DELETE] Delete Post ---
+        window.deletePost = async function(firestoreId) {
+            try {
+                const postRef = doc(db, "posts", firestoreId);
+                const postSnap = await getDoc(postRef);
+
+                if (!postSnap.exists()) return;
+                const data = postSnap.data();
+
+                const inputPw = prompt("게시글 삭제를 위해 등록하셨던 비밀번호를 입력해 주세요:");
+                if (inputPw === null) return;
+
+                if (inputPw === data.password) {
+                    await deleteDoc(postRef);
+                } else {
+                    alert("비밀번호가 일치하지 않습니다. 다시 확인해 주세요.");
+                }
+            } catch (err) {
+                console.error("Error deleting post: ", err);
+            }
+        };
+
+        // --- [UPDATE] Add Reply ---
+        window.addReply = async function(event, firestoreId) {
+            event.preventDefault();
+            const form = event.target;
+            const authorInput = form.querySelector('.reply-author-input');
+            const passwordInput = form.querySelector('.reply-password-input');
+            const contentInput = form.querySelector('.reply-content-input');
+
+            const author = authorInput.value.trim();
+            const password = passwordInput.value.trim();
+            const content = contentInput.value.trim();
+
+            if (!author || !password || !content) return;
+
+            const newReply = {
+                id: String(Date.now()),
+                author,
+                password,
+                content,
+                date: getCurrentDateTime()
+            };
+
+            try {
+                const postRef = doc(db, "posts", firestoreId);
+                await updateDoc(postRef, {
+                    replies: arrayUnion(newReply)
+                });
+                form.reset();
+
+                // 답글 작성 완료 후 작성 박스 숨기기 및 버튼 비활성화
+                const replyForm = document.getElementById(`reply-form-${firestoreId}`);
+                if (replyForm) {
+                    replyForm.style.display = 'none';
+                }
+                const writeBtn = document.querySelector(`#post-${firestoreId} .reply-write-btn`);
+                if (writeBtn) {
+                    writeBtn.classList.remove('active');
+                }
+            } catch (err) {
+                console.error("Error adding reply: ", err);
+            }
+        };
+
+        // --- [UPDATE] Delete Reply ---
+        window.deleteReply = async function(postId, replyId) {
+            try {
+                const postRef = doc(db, "posts", postId);
+                const postSnap = await getDoc(postRef);
+
+                if (!postSnap.exists()) return;
+                const postData = postSnap.data();
+                const targetReply = postData.replies.find(r => r.id === replyId);
+
+                if (!targetReply) return;
+
+                const inputPw = prompt("답글 삭제를 위해 등록하셨던 비밀번호를 입력해 주세요:");
+                if (inputPw === null) return;
+
+                if (inputPw === targetReply.password) {
+                    await updateDoc(postRef, {
+                        replies: arrayRemove(targetReply)
+                    });
+                } else {
+                    alert("비밀번호가 일치하지 않습니다. 다시 확인해 주세요.");
+                }
+            } catch (err) {
+                console.error("Error deleting reply: ", err);
+            }
+        };
+
+        // Filter Sorting Handler
+        window.changeSort = function(type) {
+            if (currentSort === type) return;
+            currentSort = type;
+
+            const latestBtn = document.getElementById('sort-latest-btn');
+            const likesBtn = document.getElementById('sort-likes-btn');
+
+            if (type === 'likes') {
+                likesBtn.classList.add('active');
+                latestBtn.classList.remove('active');
+            } else {
+                latestBtn.classList.add('active');
+                likesBtn.classList.remove('active');
+            }
+
+            renderPosts();
+        };
+
+        // Reply Section toggle action
+        window.toggleReplyBox = function(postId) {
+            const replyBox = document.getElementById(`reply-box-${postId}`);
+            if (replyBox) {
+                const currentDisplay = window.getComputedStyle(replyBox).display;
+                const nextDisplay = currentDisplay === 'none' ? 'block' : 'none';
+                replyBox.style.display = nextDisplay;
+                
+                // reply-box가 완전히 닫히는 경우 내부 작성 폼 및 버튼 활성화 상태도 함께 정리
+                if (nextDisplay === 'none') {
+                    const replyForm = document.getElementById(`reply-form-${postId}`);
+                    if (replyForm) replyForm.style.display = 'none';
+                    const writeBtn = document.querySelector(`#post-${postId} .reply-write-btn`);
+                    if (writeBtn) writeBtn.classList.remove('active');
+                }
+            }
+        };
+
+        // Reply Form toggle action
+        window.toggleReplyForm = function(postId) {
+            const replyBox = document.getElementById(`reply-box-${postId}`);
+            const replyForm = document.getElementById(`reply-form-${postId}`);
+            const writeBtn = document.querySelector(`#post-${postId} .reply-write-btn`);
+            
+            if (replyBox && replyForm) {
+                // 부모인 reply-box가 아예 닫혀있다면, 폼 노출을 위해 box 자체를 block으로 먼저 열어줌
+                if (window.getComputedStyle(replyBox).display === 'none') {
+                    replyBox.style.display = 'block';
+                }
+                
+                const currentDisplay = window.getComputedStyle(replyForm).display;
+                if (currentDisplay === 'none') {
+                    replyForm.style.display = 'flex';
+                    if (writeBtn) writeBtn.classList.add('active');
+                } else {
+                    replyForm.style.display = 'none';
+                    if (writeBtn) writeBtn.classList.remove('active');
+                }
+            }
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boston Dynamics | 로봇이 할 수 있는 일에 대한 생각을 바꾸다</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
+    <!-- Lenis for Smooth Scroll -->
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/split-type"></script>
+</head>
+<body>
+    <div class="cursor"></div>
+
+    <nav class="nav-brutal">
+        <a href="#hero" class="logo hover-target" style="text-decoration: none; display: block;">
+            <svg viewBox="0 0 300 40" fill="none" xmlns="http://www.w3.org/2000/svg" class="bd-logo" style="width: 250px; height: 40px;">
+                <!-- Spot Quadruped Geometric Icon -->
+                <g fill="white">
+                    <!-- Torso -->
+                    <path d="M10 24 L14 13 L26 13 L31 18 L28 22 L16 22 Z" />
+                    <!-- Front Leg 1 -->
+                    <path d="M27 22 L29 32 H27 L25 22 Z" />
+                    <!-- Front Leg 2 (Shadow) -->
+                    <path d="M24 22 L22 32 H20 L22 22 Z" opacity="0.6" />
+                    <!-- Back Leg 1 -->
+                    <path d="M16 22 L14 32 H12 L14 22 Z" />
+                    <!-- Back Leg 2 (Shadow) -->
+                    <path d="M13 22 L11 32 H9 L11 22 Z" opacity="0.6" />
+                    <!-- Sensor/Camera Eye -->
+                    <circle cx="29" cy="16" r="1.5" fill="black" />
+                </g>
+                <!-- Wordmark -->
+                <text x="45" y="28" fill="white" font-family="'Noto Sans KR', sans-serif" font-weight="900" font-size="20" letter-spacing="-0.5">BOSTON DYNAMICS</text>
+            </svg>
+        </a>
+        <div class="nav-links">
+            <a href="#robots" class="hover-target">로봇 제품</a>
+            <a href="#dashboard" class="hover-target">ROI 대시보드</a>
+            <a href="board.html" class="hover-target">라이브 게시판</a>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero" id="hero">
+            <div class="video-bg-container">
+                <video id="hero-video" class="video-bg" src="hero-video.mp4#t=38.3,108" autoplay muted loop playsinline></video>
+                <div class="video-overlay"></div>
+            </div>
+            <div class="hero-content">
+                <div class="company-name reveal-text">BOSTON DYNAMICS</div>
+                <h1 class="huge-text reveal-text">모빌리티의<br>새로운 시대</h1>
+                <p class="slogan reveal-text">로봇이 할 수 있는 일에 대한 당신의 생각을 바꾸십시오.</p>
+            </div>
+            <div class="scroll-down">
+                <span class="hover-target">탐색하려면 스크롤</span>
+            </div>
+        </section>
+
+        <!-- Robots Section -->
+        <div id="robots">
+            <section class="robot-section spot-section">
+                <div class="sticky-container">
+                    <h2 class="bg-text">SPOT</h2>
+                    <div class="spot-layout">
+                        <div class="robot-info">
+                            <h3 class="reveal-text">SPOT</h3>
+                            <p class="reveal-text">
+                                <span style="font-weight: 700; color: #ffffff; font-size: 1.45rem; line-height: 1.6; display: block; word-break: keep-all;">인간이 진입하기 힘든 고위험 현장의 안전 점검과 정밀 데이터 수집을 완전 자동화하는 사족보행 로봇입니다.</span>
+                                <span style="font-size: 1.2rem; color: rgba(255,255,255,0.6); font-weight: 500; margin-top: 1rem; display: block; word-break: keep-all; line-height: 1.6;">고정밀 센서 페이로드를 통해 건설 현장 및 화학 시설 등 비정형 산업 전반에서 무인 감시 임무를 수행합니다.</span>
+                            </p>
+                        </div>
+                        <div class="spot-image-container">
+                            <img src="spot.png" alt="Boston Dynamics Spot Explorer with Arm" class="spot-product-img hover-target" loading="lazy">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="robot-section stretch-section">
+                <div class="horizontal-scroll-wrapper">
+                    <div class="horizontal-panel">
+                        <h2 class="huge-text" style="font-family: 'Noto Sans KR', sans-serif; font-weight: 900; letter-spacing: -5px;">STRETCH</h2>
+                    </div>
+                    <div class="horizontal-panel dark-panel">
+                        <div class="stretch-layout">
+                            <div class="robot-info">
+                                <h3 class="reveal-text" style="font-size: 4rem; font-weight: 900; letter-spacing: -2px; margin-bottom: 0.5rem;">STRETCH</h3>
+                                <div class="reveal-text" style="font-size: 1.8rem; font-weight: 700; color: var(--accent-yellow); margin-bottom: 1.8rem; letter-spacing: -1px;">물류 자동화의 미래</div>
+                                <p class="reveal-text">
+                                    <span style="font-weight: 700; color: #ffffff;">컨테이너 하역부터 파렛트 적재까지, 공급망의 병목 현상을 완벽히 해결합니다.</span><br>
+                                    <span style="font-size: 1.35rem; color: rgba(255,255,255,0.6); font-weight: 500; margin-top: 1.8rem; display: block; word-break: keep-all; line-height: 1.5;">지치지 않는 강력한 자동화 팔과 최첨단 진공 그리퍼로 다양한 규격의 화물을 분류하여 창고 운영 속도를 극대화합니다.</span>
+                                </p>
+                            </div>
+                            <div class="stretch-image-container">
+                                <img src="stretch.png" alt="Boston Dynamics Stretch Logistics Robot" class="stretch-product-img hover-target" loading="lazy">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="robot-section atlas-section">
+                <!-- Atlas Video Background -->
+                <div class="video-bg-container">
+                    <video id="atlas-video" class="video-bg" src="Atlas_ Balancing Act _ Boston Dynamics.mp4" autoplay muted playsinline loop></video>
+                    <div class="video-overlay" style="background: rgba(0,0,0,0.65);"></div>
+                </div>
+                <div class="atlas-layout">
+                    <div class="atlas-content">
+                        <div class="glitch-wrapper">
+                            <h2 class="huge-text glitch hover-target" data-text="ATLAS" style="font-family: 'Noto Sans KR', sans-serif; font-weight: 900; letter-spacing: -5px;">ATLAS</h2>
+                            <div style="font-size: 2rem; font-weight: 700; color: rgba(255,255,255,0.6); margin-top: 15px; letter-spacing: -1px;">아틀라스</div>
+                        </div>
+                        <h3 class="reveal-text" style="margin-top: 2rem;">휴머노이드의 진화</h3>
+                        <p class="reveal-text">전동식으로 새롭게 설계된 차세대 아틀라스. 인간의 한계를 뛰어넘는 전신 이동성을 제공합니다.</p>
+                        <a href="javascript:void(0);" onclick="openAtlasVideoModal(event);" id="open-atlas-modal" class="btn-brutal hover-target">ATLAS 만나기</a>
+                    </div>
+                    <div class="atlas-image-container">
+                        <img src="atlas.png" alt="Boston Dynamics Atlas Humanoid" class="atlas-product-img hover-target" loading="lazy">
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Interactive Dashboard -->
+        <section class="dashboard-section" id="dashboard">
+            <div class="dash-header">
+                <h2>산업별 도입 성과 (ROI)</h2>
+                <p>글로벌 현장에서 실현되고 있는 자율 로봇의 실질적인 혁신 성과를 입증합니다.<br>
+                산업군별 생산성 향상 및 작업 안전성 지표를 한눈에 대조하는 데이터 시각화 대시보드입니다.</p>
+            </div>
+            
+            <div class="dash-container">
+                <!-- Left: Controls & Visual -->
+                <div class="dash-left">
+                    <div class="controls">
+                        <div class="control-group">
+                            <label>디바이스 선택</label>
+                            <div class="toggle-buttons" id="device-toggle">
+                                <button class="toggle-btn active hover-target" data-device="atlas">
+                                    ATLAS
+                                </button>
+                                <button class="toggle-btn hover-target" data-device="spot">
+                                    SPOT
+                                </button>
+                                <button class="toggle-btn hover-target" data-device="stretch">
+                                    STRETCH
+                                </button>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label>적용 산업군</label>
+                            <select id="industry-select" class="hover-target">
+                                <option value="manufacturing">제조 (Manufacturing)</option>
+                                <option value="logistics">물류 (Logistics)</option>
+                                <option value="energy">플랜트/에너지 (Plant & Energy)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="simulation-view">
+                        <div class="sim-overlay">
+                            <span id="sim-status">자율 작업 시뮬레이션 로드 중...</span>
+                        </div>
+                        <div class="sim-bg" id="sim-bg"></div>
+                        <div class="sim-case-study" id="sim-case-study">
+                            <!-- Case study content will be loaded here dynamically -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Right: Data Visualization -->
+                <div class="dash-right">
+                    <div class="data-card">
+                        <h3>예상 ROI 회수 기간</h3>
+                        <div class="number-display"><span class="counter" id="roi-months">14</span> 개월</div>
+                        <div class="bar-chart-container">
+                            <div class="bar-chart-fill" id="roi-bar" style="width: 60%;"></div>
+                        </div>
+                    </div>
+                    <div class="data-card">
+                        <h3>작업 효율 증가율 (YoY)</h3>
+                        <div class="number-display">+<span class="counter" id="eff-percent">35</span> %</div>
+                        <div class="bar-chart-container">
+                            <div class="bar-chart-fill" id="eff-bar" style="width: 35%; background-color:#00ff88;"></div>
+                        </div>
+                    </div>
+                    <div class="data-card">
+                        <h3>안전 사고 감소율</h3>
+                        <div class="number-display">-<span class="counter" id="safe-percent">92</span> %</div>
+                        <div class="bar-chart-container">
+                            <div class="bar-chart-fill" id="safe-bar" style="width: 92%; background-color:#00d2ff;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Media & Latest News Section (시안 디자인 가이드 완벽 마운트) -->
+        <section class="news-section" id="news">
+            <div class="news-header">
+                <h2>최신 미디어 및 보도자료</h2>
+                <div class="news-subtitle">Boston Dynamics의 혁신과 글로벌 기술 파트너십 소식을 실시간으로 전해드립니다.</div>
+            </div>
+            
+            <div class="news-grid">
+                <!-- Card 1 -->
+                <article class="news-card hover-target">
+                    <div class="news-img-container">
+                        <img src="C:/Users/USER/.gemini/antigravity/brain/53379817-33a1-46ce-a1a5-9b4df0f169b9/news1_field_ai_1778572106733.png" alt="보스턴 다이내믹스 x 필드AI 로봇 도입 협력" loading="lazy">
+                        <span class="news-tag">보도자료</span>
+                    </div>
+                    <div class="news-content">
+                        <h3 class="news-title">보스턴 다이내믹스와 필드AI가 미지의 역동적인 환경에 로봇을 도입하기 위해 협력하다</h3>
+                    </div>
+                </article>
+
+                <!-- Card 2 -->
+                <article class="news-card hover-target">
+                    <div class="news-img-container">
+                        <img src="C:/Users/USER/.gemini/antigravity/brain/53379817-33a1-46ce-a1a5-9b4df0f169b9/news2_atlas_ces_1778572123787.png" alt="아틀라스 CES 2026 베스트 부문 수상" loading="lazy">
+                        <span class="news-tag">특집 기사</span>
+                    </div>
+                    <div class="news-content">
+                        <h3 class="news-title">보스턴 다이내믹스 아틀라스, CES™ 2026 베스트 부문에서 '최고의 로봇'으로 선정</h3>
+                    </div>
+                </article>
+
+                <!-- Card 3 -->
+                <article class="news-card hover-target">
+                    <div class="news-img-container">
+                        <img src="C:/Users/USER/.gemini/antigravity/brain/53379817-33a1-46ce-a1a5-9b4df0f169b9/news3_hyundai_mobis_1778572138849.png" alt="현대모비스 보스턴 다이내믹스 전략적 프레임워크" loading="lazy">
+                        <span class="news-tag">특집 기사</span>
+                    </div>
+                    <div class="news-content">
+                        <h3 class="news-title">현대 모비스, 보스턴 다이내믹스와 전략적 협력 프레임워크 체결</h3>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <footer class="footer-brutal">
+            <h1 class="huge-text hover-target" style="margin-bottom: 5rem;">현장에 도입할<br>준비가 되셨습니까<a href="https://bostondynamics.com/" target="_blank" class="question-link hover-target">?</a></h1>
+            
+            <div class="footer-bottom">
+                <!-- Left: Social Media SVG Icons -->
+                <div class="footer-socials">
+                    <!-- Facebook -->
+                    <a href="https://www.facebook.com/BostonDynamicsOfficial" class="hover-target" target="_blank" aria-label="Facebook">
+                        <svg viewBox="0 0 24 24" class="footer-icon"><path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/></svg>
+                    </a>
+                    <!-- Instagram -->
+                    <a href="https://www.instagram.com/bostondynamicsofficial/?hl=en" class="hover-target" target="_blank" aria-label="Instagram">
+                        <svg viewBox="0 0 24 24" class="footer-icon"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                    </a>
+                    <!-- YouTube -->
+                    <a href="https://www.youtube.com/user/BostonDynamics" class="hover-target" target="_blank" aria-label="YouTube">
+                        <svg viewBox="0 0 24 24" class="footer-icon"><path d="M23.498 6.163c-.272-1.016-1.07-1.815-2.085-2.087-1.839-.494-9.413-.494-9.413-.494s-7.574 0-9.413.494c-1.015.272-1.813 1.071-2.085 2.087-.494 1.838-.494 5.679-.494 5.679s0 3.842.494 5.679c.272 1.016 1.07 1.815 2.085 2.087 1.839.493 9.413.493 9.413.493s7.574 0 9.413-.493c1.015-.272 1.813-1.071 2.085-2.087.494-1.837.494-5.679.494-5.679s0-3.841-.494-5.679zm-14.165 9.493v-9.303l6.4 4.662-6.4 4.641z"/></svg>
+                    </a>
+                    <!-- Twitter/X -->
+                    <a href="https://twitter.com/BostonDynamics" class="hover-target" target="_blank" aria-label="Twitter">
+                        <svg viewBox="0 0 24 24" class="footer-icon"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                    </a>
+                    <!-- LinkedIn -->
+                    <a href="https://www.linkedin.com/company/boston-dynamics/" class="hover-target" target="_blank" aria-label="LinkedIn">
+                        <svg viewBox="0 0 24 24" class="footer-icon"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                    </a>
+                    <!-- TikTok -->
+                    <a href="https://www.tiktok.com/@bostondynamicsofficial" class="hover-target" target="_blank" aria-label="TikTok">
+                        <svg viewBox="0 0 24 24" class="footer-icon"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.01 1.62 4.15.94.95 2.23 1.51 3.54 1.67v3.74c-1.78-.11-3.43-.88-4.66-2.18-.02 3.32-.01 6.64-.02 9.96-.05 1.74-.63 3.49-1.79 4.79-1.42 1.64-3.66 2.58-5.83 2.43-2.61-.13-5.06-1.79-6.07-4.21-1.34-3.08-.26-6.95 2.57-8.77 1.48-.95 3.26-1.35 4.97-1.1v3.7c-1.34-.35-2.88.08-3.79 1.13-.91.99-1.12 2.49-.52 3.73.57 1.25 1.95 2.05 3.32 1.96 1.41-.05 2.68-1.07 2.94-2.48.08-1.11.04-8.71.04-9.82.02-2.22.01-4.43.02-6.65z"/></svg>
+                    </a>
+                </div>
+                
+                <!-- Middle: Copyright -->
+                <div class="footer-copyright">
+                    &copy; 2026 Boston Dynamics. All rights reserved.
+                </div>
+                
+                <!-- Right: Policy Links -->
+                <div class="footer-policies">
+                    <span>개인정보처리방침</span>
+                    <span>이용약관</span>
+                    <span>고객지원</span>
+                </div>
+            </div>
+        </footer>
+    </main>
+
+    <!-- Cinematic Video Modal -->
+    <div id="video-modal" class="modal-overlay">
+        <div class="modal-container">
+            <button id="close-modal" class="close-btn hover-target">&times;</button>
+            <div class="video-wrapper">
+                <video id="modal-video" src="Atlas_ Balancing Act _ Boston Dynamics.mp4" style="cursor: pointer;"></video>
+                <div class="custom-video-instruction">◀ 화면을 클릭하여 재생 / 일시정지 ▶</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 비상 단독 작동용 고신뢰도 인라인 스크립트 -->
+    <script>
+        function openAtlasVideoModal(event) {
+            if (event) {
+                if (typeof event.preventDefault === 'function') event.preventDefault();
+                if (typeof event.stopPropagation === 'function') event.stopPropagation();
+            }
+            var modal = document.getElementById('video-modal');
+            var video = document.getElementById('modal-video');
+            if (modal && video) {
+                modal.classList.add('active');
+                video.muted = false;
+                video.currentTime = 0;
+                try {
+                    var playPromise = video.play();
+                    if (playPromise !== undefined) {
+                        playPromise.catch(function(error) {
+                            console.warn("음소거 해제 재생 차단됨, 음소거 후 재생 시도:", error);
+                            video.muted = true;
+                            video.play().catch(function(err) {
+                                console.error("비디오 재생 완전 실패:", err);
+                            });
+                        });
+                    }
+                } catch (e) {
+                    console.error("비디오 동기 재생 실패, 음소거 시도:", e);
+                    video.muted = true;
+                    video.play().catch(function(err) { console.error(err); });
+                }
+            }
+        }
+
+        // 모달 제어 전반 및 닫기 이벤트를 인라인 레벨에서 철벽 결속
+        (function() {
+            var closeBtn = document.getElementById('close-modal');
+            var modal = document.getElementById('video-modal');
+            var video = document.getElementById('modal-video');
+            
+            if (closeBtn && modal && video) {
+                function closeAtlasModal() {
+                    modal.classList.remove('active');
+                    video.pause();
+                    video.currentTime = 0;
+                }
+                closeBtn.onclick = function(e) {
+                    if (e && typeof e.stopPropagation === 'function') e.stopPropagation();
+                    closeAtlasModal();
+                };
+                modal.onclick = function(e) {
+                    if (e.target === modal) {
+                        closeAtlasModal();
+                    }
+                };
+                // 비디오 클릭 시 토글 플레이
+                video.onclick = function(e) {
+                    if (e && typeof e.stopPropagation === 'function') e.stopPropagation();
+                    if (video.paused) {
+                        if (video.currentTime >= 37) {
+                            video.currentTime = 0;
+                        }
+                        video.play().catch(function(err) { console.error(err); });
+                    } else {
+                        video.pause();
+                    }
+                };
+                // ESC 키로 닫기
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape' && modal.classList.contains('active')) {
+                        closeAtlasModal();
+                    }
+                });
+                // 37초 제한 검사
+                video.addEventListener('timeupdate', function() {
+                    if (video.currentTime >= 37) {
+                        video.pause();
+                        video.currentTime = 37;
+                    }
+                });
+            }
+        })();
+    </script>
+
+    <script src="script.js"></script>
+</body>
+</html>
