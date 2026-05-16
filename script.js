@@ -366,7 +366,9 @@ if (atlasVideo) {
     };
 
     const setStartTime = () => { 
-        atlasVideo.currentTime = 62; 
+        if (atlasVideo.duration > 62) {
+            atlasVideo.currentTime = 62; 
+        }
         forcePlayAtlas();
     };
 
