@@ -40,12 +40,16 @@ try {
     console.warn("GSAP/ScrollTrigger 연동이 건너뛰어졌습니다:", error);
 }
 
-// Custom Cursor Logic
+// Custom Cursor Logic (Touch Device Check Added)
 try {
     const cursor = document.querySelector('.cursor');
     const hoverTargets = document.querySelectorAll('.hover-target, a, button, select');
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
-    if (cursor && typeof gsap !== 'undefined') {
+    if (isTouchDevice && cursor) {
+        cursor.style.display = 'none';
+        document.body.style.cursor = 'auto';
+    } else if (cursor && typeof gsap !== 'undefined') {
         document.addEventListener('mousemove', (e) => {
             gsap.to(cursor, {
                 x: e.clientX,
@@ -54,9 +58,7 @@ try {
                 ease: "power2.out"
             });
         });
-    }
 
-    if (cursor) {
         hoverTargets.forEach(target => {
             target.addEventListener('mouseenter', () => {
                 cursor.classList.add('active');
@@ -423,87 +425,4 @@ if (heroVideo) {
     });
 }
 
-// --- ATLAS MODAL VIDEO PLAYER LOGIC ---
-const openModalBtn = document.getElementById('open-atlas-modal');
-const videoModal = document.getElementById('video-modal');
-const closeModalBtn = document.getElementById('close-modal');
-const modalVideo = document.getElementById('modal-video');
-
-if (openModalBtn && videoModal && closeModalBtn && modalVideo) {
-    openModalBtn.addEventListener('click', (e) => {
-        // 어떠한 런타임 에러가 발생하더라도 메인페이지 최상단으로 튕기지 않도록 preventDefault()를 가장 먼저 안전하게 실행
-        e.preventDefault();
-        
-        videoModal.classList.add('active');
-        
-        // 소리가 활성화된 상태로 설정
-        modalVideo.muted = false;
-        modalVideo.currentTime = 0;
-        
-        // play()의 동기/비동기 예외를 전방위로 방어하여 스크립트 크래시 원천 격리
-        try {
-            const playPromise = modalVideo.play();
-            if (playPromise !== undefined) {
-                playPromise.catch(error => {
-                    console.warn("소리 켠 상태로 재생 실패 (브라우저 정책): 음소거로 즉시 우회 재생합니다.", error);
-                    modalVideo.muted = true;
-                    modalVideo.play().catch(err => console.error("음소거 재생 최종 실패:", err));
-                });
-            }
-        } catch (error) {
-            console.error("비디오 재생 동기적 오류 발생, 음소거 상태로 복귀 및 재시도:", error);
-            try {
-                modalVideo.muted = true;
-                modalVideo.play().catch(err => console.error("음소거 강제 재생 실패:", err));
-            } catch (err) {
-                console.error("비디오 완전 재생 불가:", err);
-            }
-        }
-    });
-
-    // Enforce 37-second playback boundary
-    modalVideo.addEventListener('timeupdate', () => {
-        if (modalVideo.currentTime >= 37) {
-            modalVideo.pause();
-            modalVideo.currentTime = 37;
-        }
-    });
-
-    // Toggle play/pause on click (since controls are hidden)
-    modalVideo.addEventListener('click', () => {
-        if (modalVideo.paused) {
-            if (modalVideo.currentTime >= 37) {
-                modalVideo.currentTime = 0;
-            }
-            try {
-                modalVideo.play().catch(err => console.error("재생 토글 중 실패:", err));
-            } catch (err) {
-                console.error("재생 토글 동기적 실패:", err);
-            }
-        } else {
-            modalVideo.pause();
-        }
-    });
-
-    const closeModal = () => {
-        videoModal.classList.remove('active');
-        modalVideo.pause();
-        modalVideo.currentTime = 0;
-    };
-
-    closeModalBtn.addEventListener('click', closeModal);
-    
-    // Close modal when clicking on the overlay outside the container
-    videoModal.addEventListener('click', (e) => {
-        if (e.target === videoModal) {
-            closeModal();
-        }
-    });
-
-    // Close on escape key
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && videoModal.classList.contains('active')) {
-            closeModal();
-        }
-    });
-}
+// --- ATLAS MODAL VIDEO PLAYER LOGIC (REDUNDANT REMOVED, HANDLED BY INLINE SCRIPT) ---

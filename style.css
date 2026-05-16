@@ -13,6 +13,16 @@
     cursor: none;
 }
 
+/* Restore cursor for touch devices or if script fails to load */
+@media (hover: none) and (pointer: coarse) {
+    * {
+        cursor: auto !important;
+    }
+    .cursor {
+        display: none !important;
+    }
+}
+
 *:focus-visible {
     outline: 2px solid var(--accent-yellow) !important;
     outline-offset: 2px;
