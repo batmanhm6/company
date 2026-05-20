@@ -1,3 +1,65 @@
+// 새로고침 시 브라우저 기본 스크롤바 복원 점프 및 렌더링 꼬임(Jank) 예방을 위해 manual로 설정
+if (history.scrollRestoration) {
+    history.scrollRestoration = 'manual';
+}
+
+// --- Preloader Logic ---
+(function() {
+    const preloader = document.getElementById('preloader');
+    const progressBar = document.getElementById('progress-bar');
+    const loadingPercent = document.getElementById('loading-percent');
+    
+    if (preloader) {
+        // 새로고침 혹은 사이트 내 재방문(세션 유지 중)인지 체크
+        if (sessionStorage.getItem('hasSeenPreloader')) {
+            preloader.style.display = 'none';
+            return;
+        }
+
+        // 최초 접속 시 기록 남기기
+        sessionStorage.setItem('hasSeenPreloader', 'true');
+        
+        let progress = 0;
+        let isLoaded = false;
+        
+        // 프리로더 동작 중에는 스크롤 차단
+        document.body.style.overflow = 'hidden';
+        
+        // 가짜 진행률 시뮬레이션 (최대 90%까지만)
+        const progressInterval = setInterval(() => {
+            if (!isLoaded && progress < 90) {
+                progress += Math.random() * 8;
+                if (progress > 90) progress = 90;
+                updateProgress(progress);
+            }
+        }, 150);
+
+        function updateProgress(val) {
+            if (progressBar && loadingPercent) {
+                progressBar.style.width = `${val}%`;
+                loadingPercent.textContent = Math.floor(val);
+            }
+        }
+
+        // 모든 리소스 로딩 완료 시 100% 채우고 프리로더 제거
+        window.addEventListener('load', () => {
+            isLoaded = true;
+            clearInterval(progressInterval);
+            
+            setTimeout(() => {
+                updateProgress(100);
+                setTimeout(() => {
+                    preloader.classList.add('hidden');
+                    document.body.style.overflow = '';
+                    
+                    // 페이드아웃 후 완전히 DOM 공간에서 제거
+                    setTimeout(() => preloader.style.display = 'none', 800);
+                }, 500);
+            }, 100);
+        });
+    }
+})();
+
 // Initialize Lenis for Smooth Scrolling (CDN 미로드 대비 방어 장치 장착)
 let lenis;
 try {
@@ -50,7 +112,12 @@ try {
         cursor.style.display = 'none';
         document.body.style.cursor = 'auto';
     } else if (cursor && typeof gsap !== 'undefined') {
+        let cursorInitialized = false;
         document.addEventListener('mousemove', (e) => {
+            if (!cursorInitialized) {
+                gsap.set(cursor, { opacity: 1 });
+                cursorInitialized = true;
+            }
             gsap.to(cursor, {
                 x: e.clientX,
                 y: e.clientY,
@@ -119,22 +186,33 @@ try {
     console.warn("SPOT 애니메이션이 건너뛰어졌습니다:", error);
 }
 
-// STRETCH Horizontal Scroll
+// STRETCH Horizontal Scroll (Mobile Responsive Bypass via gsap.matchMedia)
 try {
     const stretchSection = document.querySelector('.stretch-section');
     const horizontalWrapper = document.querySelector('.horizontal-scroll-wrapper');
 
     if (stretchSection && horizontalWrapper && typeof gsap !== 'undefined') {
-        gsap.to(horizontalWrapper, {
-            xPercent: -50,
-            ease: "none",
-            scrollTrigger: {
-                trigger: stretchSection,
-                start: "top top",
-                end: "+=100%",
-                pin: true,
-                scrub: 1
-            }
+        let mm = gsap.matchMedia();
+
+        // 901px 이상 데스크톱 환경에서만 가로 스크롤 적용
+        mm.add("(min-width: 901px)", () => {
+            gsap.to(horizontalWrapper, {
+                xPercent: -50,
+                ease: "none",
+                scrollTrigger: {
+                    trigger: stretchSection,
+                    start: "top top",
+                    end: "+=100%",
+                    pin: true,
+                    scrub: 1,
+                    invalidateOnRefresh: true
+                }
+            });
+        });
+
+        // 900px 이하 모바일 환경에서는 스크롤 트리거 강제 정리 및 무력화
+        mm.add("(max-width: 900px)", () => {
+            gsap.set(horizontalWrapper, { clearProps: "all" });
         });
     }
 } catch (error) {
@@ -253,19 +331,41 @@ function updateDashboard() {
     setTimeout(() => {
         simStatus.textContent = `${currentDevice.toUpperCase()} x ${currentIndustry.toUpperCase()} 자율 작업 최적화 완료`;
         
+        // 도입 효과 문장 파싱 (' 및 ' 기준으로 분리)
+        const effects = data.caseEffect.split(' 및 ');
+        const effectsHtml = effects.map(effect => `
+            <div class="effect-card" style="border-left: 3px solid ${data.color};">
+                <div class="effect-icon-wrapper" style="background: ${data.color}15; color: ${data.color}; border: 1px solid ${data.color}30;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                </div>
+                <span class="effect-text">${effect}</span>
+            </div>
+        `).join('');
+
         simCaseStudy.innerHTML = `
             <div class="case-header">
-                <span class="case-title">${data.caseTitle}</span>
-                <span class="case-company-tag" style="border: 1px solid ${data.color}; color: ${data.color};">${data.casePartner}</span>
+                <div class="case-header-left">
+                    <span class="case-title">${data.caseTitle}</span>
+                </div>
+                <span class="case-company-tag" style="border: 1px solid ${data.color}; color: ${data.color}; background: ${data.color}10;">${data.casePartner}</span>
             </div>
             <div class="case-grid">
                 <div class="case-block">
-                    <span class="case-label">핵심 도입 솔루션</span>
-                    <span class="case-value">${data.caseSolution}</span>
+                    <div class="case-label-row">
+                        <span class="case-label">핵심 도입 솔루션</span>
+                    </div>
+                    <div class="case-solution-card" style="border: 1px solid rgba(255, 255, 255, 0.05); background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.005) 100%);">
+                        <div class="quote-decorator" style="color: ${data.color}10">“</div>
+                        <span class="case-value">${data.caseSolution}</span>
+                    </div>
                 </div>
-                <div class="case-metrics-brief" style="border-left: 3px solid ${data.color};">
+                <div class="case-metrics-container">
                     <span class="case-label">실제 도입 효과</span>
-                    <span class="case-value highlight" style="color: ${data.color};">${data.caseEffect}</span>
+                    <div class="effect-list">
+                        ${effectsHtml}
+                    </div>
                 </div>
             </div>
         `;
@@ -366,7 +466,9 @@ if (atlasVideo) {
     };
 
     const setStartTime = () => { 
-        atlasVideo.currentTime = 62; 
+        if (atlasVideo.duration > 62) {
+            atlasVideo.currentTime = 62; 
+        }
         forcePlayAtlas();
     };
 
@@ -384,8 +486,9 @@ if (atlasVideo) {
 // --- HERO LOCAL VIDEO BACKGROUND LOGIC ---
 const heroVideo = document.getElementById('hero-video');
 if (heroVideo) {
-    const startSec = 38.3; // 0:38.3
+    const startSec = 38.5; // 0:38.5
     const endSec = 108; // 1:48 (1분 48초)
+    let isSeeking = false;
     
     const forcePlayHero = () => {
         heroVideo.play().catch(err => {
@@ -395,11 +498,8 @@ if (heroVideo) {
         });
     };
 
-    // 비디오 로드 완료 시 초기 설정 (HTML 자체 미디어 프래그먼트 #t=38.3,108과의 더블 시킹 지연 제거)
+    // 비디오 로드 완료 시 초기 설정 (브라우저 자체 해시 로드 지원 활용)
     const initVideo = () => {
-        if (Math.abs(heroVideo.currentTime - startSec) > 2) {
-            heroVideo.currentTime = startSec;
-        }
         forcePlayHero();
     };
 
@@ -409,19 +509,35 @@ if (heroVideo) {
         heroVideo.addEventListener('loadedmetadata', initVideo);
     }
 
-    // timeupdate 이벤트를 통해 강제 구간 제어
+    // timeupdate의 빈도를 쓰로틀링(Throttling)하여 CPU 낭비를 막고 화면 버벅임 완전 박멸
+    let lastTimeUpdate = 0;
     heroVideo.addEventListener('timeupdate', () => {
-        // 구간을 벗어나면 무조건 시작점으로 되돌림
-        if (heroVideo.currentTime < startSec - 1 || heroVideo.currentTime >= endSec) {
+        const now = Date.now();
+        if (now - lastTimeUpdate < 250) return; // 250ms 간격으로만 시킹 판단 처리
+        lastTimeUpdate = now;
+
+        if (isSeeking) return;
+
+        // [핵심 필터]: 비디오가 로딩 상태이거나 시작점(0초)일 때는 브라우저 자체 해시 시킹을 위해 JS 제어를 건너뜀
+        if (heroVideo.currentTime === 0 || heroVideo.readyState < 2) return;
+
+        // 마진을 약간 넉넉하게(-3초) 두어 미세 버퍼링 시 무한 시킹 루프 방지
+        if (heroVideo.currentTime < startSec - 3 || heroVideo.currentTime >= endSec) {
+            isSeeking = true;
             heroVideo.currentTime = startSec;
             forcePlayHero();
+            setTimeout(() => { isSeeking = false; }, 500);
         }
     });
     
     // 만일 영상이 끝났을 경우에도 대비
     heroVideo.addEventListener('ended', () => {
-        heroVideo.currentTime = startSec;
-        forcePlayHero();
+        if (!isSeeking) {
+            isSeeking = true;
+            heroVideo.currentTime = startSec;
+            forcePlayHero();
+            setTimeout(() => { isSeeking = false; }, 500);
+        }
     });
 }
 

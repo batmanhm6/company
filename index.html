@@ -4,6 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Boston Dynamics | 로봇이 할 수 있는 일에 대한 생각을 바꾸다</title>
+    
+    <!-- Preloader Session Check (Prevent Flash on Reload) -->
+    <script>
+        if (sessionStorage.getItem('hasSeenPreloader')) {
+            document.documentElement.classList.add('skip-preloader');
+        }
+    </script>
+    
     <link rel="stylesheet" href="style.css">
     <!-- Preconnect for Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,6 +26,29 @@
     <script src="https://unpkg.com/split-type" defer></script>
 </head>
 <body>
+    <!-- Preloader -->
+    <div id="preloader" class="preloader">
+        <div class="preloader-content">
+            <div class="preloader-logo">
+                <svg viewBox="9 10 23 23" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 32px; height: 32px;">
+                    <g fill="white">
+                        <path d="M10 24 L14 13 L26 13 L31 18 L28 22 L16 22 Z" />
+                        <path d="M27 22 L29 32 H27 L25 22 Z" />
+                        <path d="M24 22 L22 32 H20 L22 22 Z" opacity="0.6" />
+                        <path d="M16 22 L14 32 H12 L14 22 Z" />
+                        <path d="M13 22 L11 32 H9 L11 22 Z" opacity="0.6" />
+                        <circle cx="29" cy="16" r="1.5" fill="black" />
+                    </g>
+                </svg>
+                <span>BOSTON DYNAMICS</span>
+            </div>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+            <div class="loading-text">SYSTEM INITIALIZING... <span id="loading-percent">0</span>%</div>
+        </div>
+    </div>
+    
     <div class="cursor"></div>
 
     <nav class="nav-brutal">
@@ -47,13 +78,28 @@
             <a href="#dashboard" class="hover-target">ROI 대시보드</a>
             <a href="board.html" class="hover-target">라이브 게시판</a>
         </div>
+        <!-- Mobile Menu Toggle Button -->
+        <button class="menu-toggle hover-target" id="mobile-menu-toggle" aria-label="메뉴 열기">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
     </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay" id="mobile-menu-overlay">
+        <div class="mobile-menu-links">
+            <a href="#robots" class="mobile-menu-link">로봇 제품</a>
+            <a href="#dashboard" class="mobile-menu-link">ROI 대시보드</a>
+            <a href="board.html" class="mobile-menu-link">라이브 게시판</a>
+        </div>
+    </div>
 
     <main>
         <!-- Hero Section -->
         <section class="hero" id="hero">
             <div class="video-bg-container">
-                <video id="hero-video" class="video-bg" src="hero-video.mp4#t=38.3,108" autoplay muted loop playsinline fetchpriority="high"></video>
+                <video id="hero-video" class="video-bg" src="hero-video.mp4#t=38.5,108" autoplay muted loop playsinline fetchpriority="high"></video>
                 <div class="video-overlay"></div>
             </div>
             <div class="hero-content">
@@ -62,7 +108,9 @@
                 <p class="slogan reveal-text">로봇이 할 수 있는 일에 대한 당신의 생각을 바꾸십시오.</p>
             </div>
             <div class="scroll-down">
-                <span class="hover-target">탐색하려면 스크롤</span>
+                <div class="scroll-mouse hover-target" onclick="document.getElementById('robots').scrollIntoView({ behavior: 'smooth' });" aria-label="아래로 스크롤">
+                    <div class="scroll-wheel"></div>
+                </div>
             </div>
         </section>
 
@@ -112,7 +160,7 @@
             <section class="robot-section atlas-section">
                 <!-- Atlas Video Background -->
                 <div class="video-bg-container">
-                    <video id="atlas-video" class="video-bg" src="Atlas_ Balancing Act _ Boston Dynamics.mp4" autoplay muted playsinline loop poster="atlas.png"></video>
+                    <video id="atlas-video" class="video-bg" src="atlas-video.mp4" autoplay muted playsinline loop poster="atlas.png"></video>
                     <div class="video-overlay" style="background: rgba(0,0,0,0.65);"></div>
                 </div>
                 <div class="atlas-layout">
@@ -123,7 +171,7 @@
                         </div>
                         <h3 class="reveal-text" style="margin-top: 2rem;">휴머노이드의 진화</h3>
                         <p class="reveal-text">전동식으로 새롭게 설계된 차세대 아틀라스. 인간의 한계를 뛰어넘는 전신 이동성을 제공합니다.</p>
-                        <a href="javascript:void(0);" onclick="openAtlasVideoModal(event);" id="open-atlas-modal" class="btn-brutal hover-target">ATLAS 만나기</a>
+                        <a href="javascript:void(0);" onclick="openAtlasVideoModal(event);" id="open-atlas-modal" class="btn-brutal hover-target">ATLAS 만나기 <span class="arrow-icon">➔</span></a>
                     </div>
                     <div class="atlas-image-container">
                         <img src="atlas.png" alt="Boston Dynamics Atlas Humanoid" class="atlas-product-img hover-target" loading="lazy" width="800" height="800">
@@ -214,7 +262,7 @@
             
             <div class="news-grid">
                 <!-- Card 1 -->
-                <article class="news-card hover-target">
+                <a href="article1.html" class="news-card hover-target">
                     <div class="news-img-container">
                         <img src="news1.png" alt="보스턴 다이내믹스 x 필드AI 로봇 도입 협력" loading="lazy" width="1280" height="720">
                         <span class="news-tag">보도자료</span>
@@ -222,10 +270,10 @@
                     <div class="news-content">
                         <h3 class="news-title">보스턴 다이내믹스와 필드AI가 미지의 역동적인 환경에 로봇을 도입하기 위해 협력하다</h3>
                     </div>
-                </article>
+                </a>
 
                 <!-- Card 2 -->
-                <article class="news-card hover-target">
+                <a href="article2.html" class="news-card hover-target">
                     <div class="news-img-container">
                         <img src="news2.png" alt="아틀라스 CES 2026 베스트 부문 수상" loading="lazy" width="1280" height="720">
                         <span class="news-tag">특집 기사</span>
@@ -233,10 +281,10 @@
                     <div class="news-content">
                         <h3 class="news-title">보스턴 다이내믹스 아틀라스, CES™ 2026 베스트 부문에서 '최고의 로봇'으로 선정</h3>
                     </div>
-                </article>
+                </a>
 
                 <!-- Card 3 -->
-                <article class="news-card hover-target">
+                <a href="article3.html" class="news-card hover-target">
                     <div class="news-img-container">
                         <img src="news3.png" alt="현대모비스 보스턴 다이내믹스 전략적 프레임워크" loading="lazy" width="1280" height="720">
                         <span class="news-tag">특집 기사</span>
@@ -244,7 +292,7 @@
                     <div class="news-content">
                         <h3 class="news-title">현대 모비스, 보스턴 다이내믹스와 전략적 협력 프레임워크 체결</h3>
                     </div>
-                </article>
+                </a>
             </div>
         </section>
 
@@ -300,7 +348,7 @@
         <div class="modal-container">
             <button id="close-modal" class="close-btn hover-target">&times;</button>
             <div class="video-wrapper">
-                <video id="modal-video" src="Atlas_ Balancing Act _ Boston Dynamics.mp4" style="cursor: pointer;"></video>
+                <video id="modal-video" src="atlas-video.mp4" poster="atlas.png" playsinline preload="auto" style="cursor: pointer;"></video>
                 <div class="custom-video-instruction">◀ 화면을 클릭하여 재생 / 일시정지 ▶</div>
             </div>
         </div>
@@ -383,6 +431,50 @@
                         video.pause();
                         video.currentTime = 37;
                     }
+                });
+            }
+        })();
+
+        // 모바일 햄버거 메뉴 토글 로직
+        (function() {
+            var toggleBtn = document.getElementById('mobile-menu-toggle');
+            var menuOverlay = document.getElementById('mobile-menu-overlay');
+            var menuLinks = document.querySelectorAll('.mobile-menu-link');
+            
+            if (toggleBtn && menuOverlay) {
+                function toggleMenu() {
+                    toggleBtn.classList.toggle('active');
+                    menuOverlay.classList.toggle('active');
+                    
+                    if (menuOverlay.classList.contains('active')) {
+                        document.body.style.overflow = 'hidden';
+                    } else {
+                        document.body.style.overflow = '';
+                    }
+                }
+                
+                toggleBtn.onclick = function(e) {
+                    if (e && typeof e.stopPropagation === 'function') e.stopPropagation();
+                    toggleMenu();
+                };
+                
+                menuLinks.forEach(function(link) {
+                    link.onclick = function(e) {
+                        toggleMenu();
+                        
+                        var targetId = link.getAttribute('href');
+                        if (targetId.startsWith('#')) {
+                            e.preventDefault();
+                            var targetEl = document.querySelector(targetId);
+                            if (targetEl) {
+                                if (typeof lenis !== 'undefined') {
+                                    lenis.scrollTo(targetEl);
+                                } else {
+                                    targetEl.scrollIntoView({ behavior: 'smooth' });
+                                }
+                            }
+                        }
+                    };
                 });
             }
         })();
