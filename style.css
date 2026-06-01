@@ -840,7 +840,6 @@ html.skip-preloader .preloader {
 .dark-panel .btn-brutal:hover { color: var(--text-color); }
 .dark-panel .btn-brutal::before { background-color: var(--text-color); }
 
-<<<<<<< HEAD
 /* Specific styling for Atlas & Spot Buttons to emphasize clickability and tactile feedback */
 .btn-accent-yellow,
 #open-atlas-modal {
@@ -861,30 +860,10 @@ html.skip-preloader .preloader {
 }
 
 .btn-accent-yellow::before,
-=======
-/* Specific styling for Atlas Button to emphasize clickability and tactile feedback */
-#open-atlas-modal {
-    background-color: var(--accent-yellow);
-    color: #000000 !important;
-    border: 3px solid var(--accent-yellow);
-    box-shadow: 6px 6px 0px #ffffff;
-    font-weight: 900;
-    font-size: 1.25rem;
-    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s, border-color 0.3s, color 0.3s;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.8rem;
-    padding: 1.3rem 2.8rem;
-    text-transform: uppercase;
-}
-
->>>>>>> bbc4efbb74b0fd78f1a8caef33f4f0554ca36b0e
 #open-atlas-modal::before {
     display: none !important; /* Disable standard sliding layer for pure tactile feedback */
 }
 
-<<<<<<< HEAD
 .btn-accent-yellow .arrow-icon,
 #open-atlas-modal .arrow-icon {
     display: inline-flex !important;
@@ -912,31 +891,6 @@ html.skip-preloader .preloader {
 #open-atlas-modal:active {
     transform: translate(5px, 5px) !important;
     box-shadow: 1px 1px 0px var(--accent-yellow) !important;
-=======
-#open-atlas-modal .arrow-icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    font-size: 1.35rem;
-}
-
-#open-atlas-modal:hover {
-    background-color: #ffffff;
-    border-color: #ffffff;
-    color: #000000 !important;
-    transform: translate(3px, 3px);
-    box-shadow: 3px 3px 0px var(--accent-yellow);
-}
-
-#open-atlas-modal:hover .arrow-icon {
-    transform: translateX(6px);
-}
-
-#open-atlas-modal:active {
-    transform: translate(5px, 5px);
-    box-shadow: 1px 1px 0px var(--accent-yellow);
->>>>>>> bbc4efbb74b0fd78f1a8caef33f4f0554ca36b0e
 }
 
 /* Interactive Dashboard */
@@ -1097,7 +1051,6 @@ html.skip-preloader .preloader {
     opacity: 0;
     transition: opacity 0.4s ease, transform 0.4s ease, border-color 0.4s ease;
     transform: translateY(10px);
-<<<<<<< HEAD
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     border-radius: 16px;
@@ -1111,10 +1064,6 @@ html.skip-preloader .preloader {
     );
     background-size: 300% 300%;
     animation: auroraMove 15s ease infinite;
-=======
-    /* 텍스트 영역 뒤의 촘촘한 격자무늬를 가리기 위해 98% 불투명도의 극도로 짙은 다크 그래디언트 배경 주입 */
-    background: radial-gradient(circle at 10% 10%, rgba(12, 12, 12, 0.98) 0%, rgba(4, 4, 4, 0.99) 100%);
->>>>>>> bbc4efbb74b0fd78f1a8caef33f4f0554ca36b0e
 }
 .sim-case-study.active {
     opacity: 1;
@@ -1183,7 +1132,6 @@ html.skip-preloader .preloader {
     padding: 2.2rem 2.4rem; /* 쾌적한 상하좌우 여백으로 답답함 제거 */
     overflow: hidden;
     height: 100%;
-<<<<<<< HEAD
     display: flex;
     flex-direction: column;
     justify-content: center; /* 텍스트가 세로 중앙에 균형감 있게 안착하도록 배치 */
@@ -1217,41 +1165,6 @@ html.skip-preloader .preloader {
 .case-metrics-container {
     display: flex;
     flex-direction: column;
-=======
-    display: flex;
-    flex-direction: column;
-    justify-content: center; /* 텍스트가 세로 중앙에 균형감 있게 안착하도록 배치 */
-    box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.01), 0 10px 30px rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur(5px);
-}
-
-.quote-decorator {
-    position: absolute;
-    top: -15px;
-    left: 8px;
-    font-size: 6rem;
-    font-weight: 900;
-    line-height: 1;
-    font-family: serif;
-    user-select: none;
-    pointer-events: none;
-}
-
-.case-value {
-    font-size: 1.15rem;
-    font-weight: 500;
-    color: rgba(255, 255, 255, 0.9);
-    line-height: 1.6;
-    word-break: keep-all;
-    position: relative;
-    z-index: 2;
-}
-
-
-.case-metrics-container {
-    display: flex;
-    flex-direction: column;
->>>>>>> bbc4efbb74b0fd78f1a8caef33f4f0554ca36b0e
     gap: 0.8rem;
 }
 
@@ -1291,11 +1204,7 @@ html.skip-preloader .preloader {
 }
 
 .effect-text {
-<<<<<<< HEAD
     font-size: 1.25rem;
-=======
-    font-size: 1.05rem;
->>>>>>> bbc4efbb74b0fd78f1a8caef33f4f0554ca36b0e
     font-weight: 700;
     color: #ffffff;
     line-height: 1.45;
@@ -1580,7 +1489,6 @@ html.skip-preloader .preloader {
 /* Responsive */
 @media (max-width: 1024px) {
     .dash-container { 
-<<<<<<< HEAD
         padding: 2rem !important;
         gap: 2rem;
     }
@@ -1619,32 +1527,13 @@ html.skip-preloader .preloader {
     .simulation-view {
         min-height: auto;
         height: 600px;
-=======
-        flex-direction: column; 
-        padding: 1.5rem !important;
-        gap: 2rem;
-    }
-    .dash-left, .dash-right {
-        width: 100%;
-    }
-    .controls {
-        flex-direction: column;
-        gap: 1.2rem;
-    }
-    .simulation-view {
-        height: 480px; /* Increased from 380px to prevent clipping on tablets */
->>>>>>> bbc4efbb74b0fd78f1a8caef33f4f0554ca36b0e
     }
     .sim-case-study {
         padding: 4.5rem 1.5rem 1.5rem 1.5rem;
         gap: 1.5rem;
     }
     .case-title {
-<<<<<<< HEAD
         font-size: 1.7rem;
-=======
-        font-size: 1.35rem;
->>>>>>> bbc4efbb74b0fd78f1a8caef33f4f0554ca36b0e
     }
     .case-grid {
         grid-template-columns: 1fr;
@@ -1655,11 +1544,7 @@ html.skip-preloader .preloader {
         padding: 1.4rem 1.6rem;
     }
     .case-value {
-<<<<<<< HEAD
         font-size: 1.25rem;
-=======
-        font-size: 1.05rem;
->>>>>>> bbc4efbb74b0fd78f1a8caef33f4f0554ca36b0e
     }
     .number-display {
         font-size: 2.2rem;
@@ -1682,7 +1567,6 @@ html.skip-preloader .preloader {
 
 /* Mobile Portrait Dashboard Fix */
 @media (max-width: 600px) {
-<<<<<<< HEAD
     .dash-container {
         padding: 1.2rem !important; /* 좁은 모바일 화면에서 콘텐츠 좌우 영역 확장 */
     }
@@ -1704,10 +1588,6 @@ html.skip-preloader .preloader {
         width: 100%;
         height: 100%;
         z-index: 0;
-=======
-    .simulation-view {
-        height: 660px !important; /* 모바일 그리드 적층에 대응하여 넉넉한 영역 확보 */
->>>>>>> bbc4efbb74b0fd78f1a8caef33f4f0554ca36b0e
     }
     .sim-overlay {
         top: 0.75rem !important;
@@ -1716,7 +1596,6 @@ html.skip-preloader .preloader {
         padding: 0.4rem 0.8rem !important;
     }
     .sim-case-study {
-<<<<<<< HEAD
         position: relative !important; /* absolute를 풀어 부모 높이가 동적으로 늘어나도록 유도 */
         top: 0 !important;
         left: 0 !important;
@@ -1725,10 +1604,6 @@ html.skip-preloader .preloader {
         padding: 4.8rem 1.25rem 1.5rem 1.25rem !important; /* 좌우 여백을 늘려 텍스트 숨통 확보 */
         gap: 1.1rem !important;
         z-index: 1;
-=======
-        padding: 4.8rem 1.25rem 1.5rem 1.25rem !important; /* 좌우 여백을 늘려 텍스트 숨통 확보 */
-        gap: 1.1rem !important;
->>>>>>> bbc4efbb74b0fd78f1a8caef33f4f0554ca36b0e
     }
     .case-header {
         flex-direction: column;
@@ -1745,31 +1620,19 @@ html.skip-preloader .preloader {
         color: #00b4ff !important; /* 가시성이 극적으로 높은 밝은 블루 브랜딩 컬러 */
     }
     .case-title {
-<<<<<<< HEAD
         font-size: 1.5rem;
-=======
-        font-size: 1.2rem;
->>>>>>> bbc4efbb74b0fd78f1a8caef33f4f0554ca36b0e
         line-height: 1.4;
         font-weight: 800;
     }
     .case-label {
-<<<<<<< HEAD
         font-size: 0.95rem !important;
-=======
-        font-size: 0.82rem !important;
->>>>>>> bbc4efbb74b0fd78f1a8caef33f4f0554ca36b0e
         color: #999 !important; /* 가독성을 위해 훨씬 선명한 그레이톤 */
         font-weight: 700 !important;
         letter-spacing: 0.5px !important;
         margin-bottom: 0.1rem !important;
     }
     .case-value {
-<<<<<<< HEAD
         font-size: 1.15rem;
-=======
-        font-size: 0.95rem;
->>>>>>> bbc4efbb74b0fd78f1a8caef33f4f0554ca36b0e
         line-height: 1.6; /* 빽빽함을 줄이고 편안함을 부여하는 최적 줄간격 */
         color: rgba(255, 255, 255, 0.9) !important;
     }
@@ -1786,11 +1649,7 @@ html.skip-preloader .preloader {
         gap: 0.8rem !important;
     }
     .effect-text {
-<<<<<<< HEAD
         font-size: 1.1rem !important;
-=======
-        font-size: 0.92rem !important;
->>>>>>> bbc4efbb74b0fd78f1a8caef33f4f0554ca36b0e
         line-height: 1.4 !important;
     }
 }

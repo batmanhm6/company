@@ -334,7 +334,6 @@ function updateDashboard() {
         // 도입 효과 문장 파싱 (' 및 ' 기준으로 분리)
         const effects = data.caseEffect.split(' 및 ');
         const effectsHtml = effects.map(effect => `
-<<<<<<< HEAD
             <div class="sleek-effect-card" style="border-left: 4px solid ${data.color};">
                 <div class="sleek-effect-icon" style="color: ${data.color};">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
@@ -371,38 +370,6 @@ function updateDashboard() {
                         실제 도입 효과
                     </div>
                     <div class="sleek-effects-list">
-=======
-            <div class="effect-card" style="border-left: 3px solid ${data.color};">
-                <div class="effect-icon-wrapper" style="background: ${data.color}15; color: ${data.color}; border: 1px solid ${data.color}30;">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                    </svg>
-                </div>
-                <span class="effect-text">${effect}</span>
-            </div>
-        `).join('');
-
-        simCaseStudy.innerHTML = `
-            <div class="case-header">
-                <div class="case-header-left">
-                    <span class="case-title">${data.caseTitle}</span>
-                </div>
-                <span class="case-company-tag" style="border: 1px solid ${data.color}; color: ${data.color}; background: ${data.color}10;">${data.casePartner}</span>
-            </div>
-            <div class="case-grid">
-                <div class="case-block">
-                    <div class="case-label-row">
-                        <span class="case-label">핵심 도입 솔루션</span>
-                    </div>
-                    <div class="case-solution-card" style="border: 1px solid rgba(255, 255, 255, 0.05); background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.005) 100%);">
-                        <div class="quote-decorator" style="color: ${data.color}10">“</div>
-                        <span class="case-value">${data.caseSolution}</span>
-                    </div>
-                </div>
-                <div class="case-metrics-container">
-                    <span class="case-label">실제 도입 효과</span>
-                    <div class="effect-list">
->>>>>>> bbc4efbb74b0fd78f1a8caef33f4f0554ca36b0e
                         ${effectsHtml}
                     </div>
                 </div>
