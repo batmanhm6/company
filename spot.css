@@ -1,0 +1,477 @@
+/* SPOT Detail Page Specific Styles */
+:root {
+    --spot-dark: #121212;
+    --spot-gray: #1e1e1e;
+    --spot-yellow: #f7d100;
+    --spot-white: #f5f5f5;
+    --spot-light-gray: #a0a0a0;
+}
+
+body.spot-page {
+    background-color: var(--spot-dark);
+    color: var(--spot-white);
+    overflow-x: hidden;
+}
+
+/* Spot Hero Section */
+.spot-hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 8rem 4rem 4rem 4rem;
+    overflow: hidden;
+}
+
+.spot-hero-bg {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 0;
+    background: radial-gradient(circle at 70% 50%, rgba(247, 209, 0, 0.05) 0%, rgba(18, 18, 18, 1) 60%);
+}
+
+.spot-hero-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 4rem;
+    width: 100%;
+    max-width: 1500px;
+    margin: 0 auto;
+    z-index: 1;
+    align-items: center;
+}
+
+.spot-hero-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.spot-hero-badge {
+    display: inline-block;
+    padding: 0.4rem 1rem;
+    background-color: rgba(247, 209, 0, 0.1);
+    color: var(--spot-yellow);
+    font-weight: 800;
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+    border-radius: 4px;
+    align-self: flex-start;
+    border: 1px solid rgba(247, 209, 0, 0.3);
+}
+
+.spot-hero-title {
+    font-family: var(--font-heading);
+    font-size: clamp(3rem, 6vw, 5.5rem);
+    font-weight: 900;
+    line-height: 1.2;
+    letter-spacing: -2px;
+    text-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    margin-bottom: 0.8rem; /* 타이틀 바로 밑 설명문과의 간격 추가 */
+}
+
+.spot-title-yellow {
+    color: var(--spot-yellow);
+}
+
+.spot-hero-desc {
+    font-size: 1.5rem;
+    color: var(--spot-light-gray);
+    line-height: 1.6;
+    max-width: 600px;
+    word-break: keep-all;
+}
+
+.spot-hero-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.btn-primary {
+    background-color: var(--spot-yellow);
+    color: #000;
+    padding: 1rem 2.5rem;
+    font-weight: 900;
+    font-size: 1.1rem;
+    text-decoration: none;
+    transition: transform 0.3s, box-shadow 0.3s;
+    box-shadow: 0 4px 15px rgba(247, 209, 0, 0.3);
+    border: 2px solid var(--spot-yellow);
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(247, 209, 0, 0.5);
+}
+
+.btn-outline {
+    background-color: transparent;
+    color: var(--spot-white);
+    padding: 1rem 2.5rem;
+    font-weight: 900;
+    font-size: 1.1rem;
+    text-decoration: none;
+    border: 2px solid rgba(255,255,255,0.3);
+    transition: all 0.3s;
+}
+
+.btn-outline:hover {
+    border-color: var(--spot-white);
+    background-color: rgba(255,255,255,0.05);
+}
+
+.spot-hero-visual {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.spot-hero-img {
+    width: 100%;
+    max-width: 800px;
+    border-radius: 12px;
+    border: 3px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(247, 209, 0, 0.05);
+    transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+    animation: float 6s ease-in-out infinite;
+    object-fit: cover;
+}
+
+.spot-hero-img:hover {
+    border-color: var(--spot-yellow);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), 0 0 50px rgba(247, 209, 0, 0.25);
+}
+
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-15px); }
+    100% { transform: translateY(0px); }
+}
+
+/* Core Features */
+.spot-features {
+    padding: 8rem 4rem;
+    background-color: #0a0a0a;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 5rem;
+}
+
+.section-header h2 {
+    font-family: var(--font-heading);
+    font-size: 3.5rem;
+    font-weight: 900;
+    letter-spacing: -1px;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.5rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.feature-card {
+    background-color: var(--spot-gray);
+    padding: 3rem 2rem;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform, opacity;
+    position: relative;
+    overflow: hidden;
+}
+
+.feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 4px;
+    background-color: var(--spot-yellow);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.feature-card:hover {
+    transform: translateY(-10px);
+    border-color: rgba(247, 209, 0, 0.3);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+}
+
+.feature-card:hover::before {
+    transform: scaleX(1);
+}
+
+.feature-icon {
+    width: 60px;
+    height: 60px;
+    background-color: rgba(247, 209, 0, 0.1);
+    color: var(--spot-yellow);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 2rem;
+    font-size: 1.5rem;
+}
+
+.feature-card h3 {
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+}
+
+.feature-card p {
+    color: var(--spot-light-gray);
+    font-size: 1.1rem;
+    line-height: 1.6;
+    word-break: keep-all;
+}
+
+/* Interactive Specs (Clean Tabbed Sheet - White Theme) */
+.spot-specs-section {
+    padding: 8rem 4rem;
+    background-color: #ffffff;
+    color: #121212;
+    position: relative;
+    z-index: 1;
+}
+
+.specs-container {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.specs-main-title {
+    font-family: var(--font-heading);
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 900;
+    margin-bottom: 0.5rem;
+    color: #121212;
+}
+
+.specs-subtitle {
+    font-size: 1.2rem;
+    color: #666666;
+    margin-bottom: 4rem;
+    font-weight: 500;
+}
+
+.specs-tabs {
+    display: flex;
+    border-bottom: 1px solid #e0e0e0;
+    margin-bottom: 3.5rem;
+}
+
+.spec-tab-btn {
+    font-family: var(--font-body);
+    font-size: 1.3rem;
+    font-weight: 700;
+    background: none;
+    border: none;
+    color: #a0a0a0;
+    padding: 1rem 0;
+    margin-right: 3rem;
+    cursor: pointer;
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+.spec-tab-btn::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: #121212;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+}
+
+.spec-tab-btn.active {
+    color: #121212;
+}
+
+.spec-tab-btn.active::after {
+    transform: scaleX(1);
+}
+
+.specs-layout {
+    display: flex;
+    gap: 3rem;
+    align-items: flex-start;
+}
+
+.specs-content-wrapper {
+    flex: 0 0 60%; /* 글씨 영역 고정 */
+}
+
+.spec-tab-content {
+    display: none;
+}
+
+.spec-tab-content.active {
+    display: block;
+}
+
+/* Grid Layouts for Tabs */
+.specs-columns {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2.5rem;
+}
+
+.specs-columns-half-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 5rem;
+}
+
+.specs-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.column-title {
+    font-family: var(--font-body);
+    font-size: 1.25rem;
+    font-weight: 900;
+    color: #121212;
+    border-bottom: 2.5px solid #121212;
+    padding-bottom: 0.6rem;
+    margin-bottom: 2rem;
+    letter-spacing: 0.5px;
+}
+
+.column-title.sub-title {
+    margin-top: 3.5rem;
+}
+
+.spec-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.spec-list li {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 0.8rem;
+}
+
+.spec-list li:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.spec-label {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: #121212;
+    margin-bottom: 0.3rem;
+}
+
+.spec-label small {
+    font-weight: 400;
+    color: #666666;
+}
+
+.spec-val {
+    font-size: 1.1rem;
+    color: #4a5568;
+    font-weight: 500;
+    line-height: 1.4;
+    word-break: keep-all;
+}
+
+.spec-footnote {
+    font-size: 0.85rem;
+    color: #718096;
+    margin-top: 1.5rem;
+    line-height: 1.5;
+}
+
+/* Right Side Image Styling */
+.specs-robot-visual {
+    flex: 0 0 37%; /* 이미지 영역을 37%로 대폭 확대 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: sticky;
+    top: 120px;
+    padding-top: 2rem;
+}
+
+.specs-robot-img {
+    width: 100%;
+    max-width: 520px; /* 이미지 최대 가로폭을 380px에서 520px로 확장! */
+    height: auto;
+    border-radius: 12px;
+    border: 3px solid rgba(0, 0, 0, 0.05);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12), 0 0 15px rgba(247, 209, 0, 0.05);
+    animation: specs-float 5s ease-in-out infinite;
+    object-fit: cover;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.specs-robot-img:hover {
+    transform: translateY(-5px);
+    border-color: var(--spot-yellow);
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.18), 0 0 25px rgba(247, 209, 0, 0.2);
+}
+
+@keyframes specs-float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-8px); }
+    100% { transform: translateY(0px); }
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .spot-hero-grid { grid-template-columns: 1fr; text-align: center; }
+    .spot-hero-badge { align-self: center; }
+    .spot-hero-desc { margin: 0 auto; }
+    .spot-hero-actions { justify-content: center; }
+    .features-grid { grid-template-columns: 1fr; }
+    
+    /* Specs Responsive */
+    .specs-layout { flex-direction: column-reverse; gap: 3rem; }
+    .specs-robot-visual { width: 100%; position: static; padding-top: 0; }
+    .specs-robot-img { max-width: 320px; margin: 0 auto; }
+    .specs-columns { grid-template-columns: repeat(2, 1fr); gap: 2rem; }
+    .specs-columns-half-grid { grid-template-columns: 1fr; gap: 3rem; }
+}
+
+@media (max-width: 600px) {
+    .spot-hero-title { font-size: 2.5rem; }
+    .spot-hero { padding: 6rem 2rem 3rem; }
+    
+    /* Mobile Navigation Logo Left Alignment */
+    .nav-brutal {
+        padding: 1.2rem 1.5rem !important;
+        justify-content: flex-start !important;
+    }
+    .nav-brutal .logo {
+        margin-left: 0 !important;
+        margin-right: auto !important;
+        display: block !important;
+    }
+    .bd-logo {
+        width: 180px !important;
+        height: auto !important;
+    }
+    
+    /* Specs Mobile */
+    .spot-specs-section { padding: 5rem 2rem; }
+    .specs-columns { grid-template-columns: 1fr; }
+    .spec-tab-btn { font-size: 1.1rem; margin-right: 1.5rem; }
+}

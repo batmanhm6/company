@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPOT | 민첩한 산업용 사족보행 로봇 | Boston Dynamics</title>
+    
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="spot.css">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;700;900&family=Noto+Sans+KR:wght@400;700;900&family=Outfit:wght@300;400;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js" defer></script>
+</head>
+<body class="spot-page">
+    <div class="cursor"></div>
+
+    <!-- Navigation -->
+    <nav class="nav-brutal" style="background: rgba(0,0,0,0.9); padding: 1.5rem 4rem;">
+        <a href="index.html" class="logo hover-target" style="text-decoration: none; display: block;">
+            <svg viewBox="0 0 300 40" fill="none" xmlns="http://www.w3.org/2000/svg" class="bd-logo" style="width: 250px; height: 40px;">
+                <g fill="white">
+                    <path d="M10 24 L14 13 L26 13 L31 18 L28 22 L16 22 Z" />
+                    <path d="M27 22 L29 32 H27 L25 22 Z" />
+                    <path d="M24 22 L22 32 H20 L22 22 Z" opacity="0.6" />
+                    <path d="M16 22 L14 32 H12 L14 22 Z" />
+                    <path d="M13 22 L11 32 H9 L11 22 Z" opacity="0.6" />
+                    <circle cx="29" cy="16" r="1.5" fill="black" />
+                </g>
+                <text x="45" y="28" fill="white" font-family="'Noto Sans KR', sans-serif" font-weight="900" font-size="20" letter-spacing="-0.5">BOSTON DYNAMICS</text>
+            </svg>
+        </a>
+        <div class="nav-links">
+            <a href="index.html" class="hover-target" style="margin-left: 0;">홈으로 돌아가기</a>
+        </div>
+    </nav>
+
+    <main>
+        <!-- 1. Hero Section -->
+        <section class="spot-hero">
+            <div class="spot-hero-bg"></div>
+            <div class="spot-hero-grid">
+                <div class="spot-hero-content">
+                    <span class="spot-hero-badge">ENTERPRISE ROBOTICS</span>
+                    <h1 class="spot-hero-title gs-reveal"><span class="spot-title-yellow">SPOT</span><br>민첩한 산업용<br>사족보행 로봇</h1>
+                    <p class="spot-hero-desc gs-reveal" style="transition-delay: 0.1s;">
+                        당신의 팀원, 당신의 도구. 위험한 환경에서도 데이터를 수집하고 통찰력을 제공합니다.
+                    </p>
+                    <div class="spot-hero-actions gs-reveal" style="transition-delay: 0.2s;">
+                        <a href="#specs" class="btn-primary hover-target">제품 사양 보기</a>
+                        <a href="#" class="btn-outline hover-target">도입 문의</a>
+                    </div>
+                </div>
+                <div class="spot-hero-visual gs-reveal">
+                    <img src="spot.png" alt="Spot" class="spot-hero-img hover-target">
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. Core Features (Grid Layout) -->
+        <section class="spot-features">
+            <div class="section-header">
+                <h2 class="gs-fade-up">핵심 기능</h2>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card gs-fade-up">
+                    <div class="feature-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                    </div>
+                    <h3>직관적인 사용 (Simple)</h3>
+                    <p>조작이 쉽고, 수동 조종 및 자율 주행 임무를 현장에서 빠르게 설정하여 즉시 투입이 가능합니다.</p>
+                </div>
+                <div class="feature-card gs-fade-up">
+                    <div class="feature-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                    </div>
+                    <h3>확장성 (Scalable)</h3>
+                    <p>단일 로봇부터 대규모 플릿까지 'Orbit' 소프트웨어를 통해 전 세계 어디서든 원격으로 통합 관리합니다.</p>
+                </div>
+                <div class="feature-card gs-fade-up">
+                    <div class="feature-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                    </div>
+                    <h3>신뢰성 (Reliable)</h3>
+                    <p>360도 인지 능력, 장애물 회피, 스스로 일어나는(Self-righting) 기능으로 극한의 환경에서도 멈추지 않습니다.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. Interactive Specifications (Tabbed Spec Sheet) -->
+        <section id="specs" class="spot-specs-section">
+            <div class="specs-container">
+                <h2 class="specs-main-title">스팟 사양</h2>
+                <p class="specs-subtitle">Spot이 운영되는 이유에 대해 더 알아보세요: 저희 사양을 자세히 살펴보세요.</p>
+                
+                <div class="specs-tabs">
+                    <button class="spec-tab-btn active hover-target" data-tab="base-robot">베이스 로봇</button>
+                    <button class="spec-tab-btn hover-target" data-tab="battery-payload">배터리 및 탑재체</button>
+                </div>
+                
+                <div class="specs-layout">
+                    <div class="specs-content-wrapper">
+                        <!-- Tab 1: Base Robot -->
+                        <div class="spec-tab-content active" id="base-robot">
+                            <div class="specs-columns">
+                                <!-- 치수 -->
+                                <div class="specs-column">
+                                    <h3 class="column-title">치수</h3>
+                                    <ul class="spec-list">
+                                        <li>
+                                            <span class="spec-label">길이</span>
+                                            <span class="spec-val">1100 mm (43.3인치)</span>
+                                        </li>
+                                        <li>
+                                            <span class="spec-label">폭</span>
+                                            <span class="spec-val">500 mm (19.7 인치)</span>
+                                        </li>
+                                        <li>
+                                            <span class="spec-label">높이 (앉아서)</span>
+                                            <span class="spec-val">191 mm (7.5인치)</span>
+                                        </li>
+                                        <li>
+                                            <span class="spec-label">기본 높이 (걷기)</span>
+                                            <span class="spec-val">610 mm (24.0 인치)</span>
+                                        </li>
+                                        <li>
+                                            <span class="spec-label">최대 높이 (걷기)</span>
+                                            <span class="spec-val">700 mm (27.6인치)</span>
+                                        </li>
+                                        <li>
+                                            <span class="spec-label">최소 높이 (걷기)</span>
+                                            <span class="spec-val">520 mm (20.5 인치)</span>
+                                        </li>
+                                        <li>
+                                            <span class="spec-label">순질량/무게 (배터리가 있는 스팟)</span>
+                                            <span class="spec-val">33.8kg (74.5 lb)</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                                
+                                <!-- 이동 -->
+                                <div class="specs-column">
+                                    <h3 class="column-title">이동</h3>
+                                    <ul class="spec-list">
+                                        <li>
+                                            <span class="spec-label">최대 속도</span>
+                                            <span class="spec-val">1.6 m/s</span>
+                                        </li>
+                                        <li>
+                                            <span class="spec-label">맥스 슬로프</span>
+                                            <span class="spec-val">±30°</span>
+                                        </li>
+                                        <li>
+                                            <span class="spec-label">최대 걸음 높이</span>
+                                            <span class="spec-val">300 mm (11.8 인치)</span>
+                                        </li>
+                                    </ul>
+                                    <h3 class="column-title sub-title">이동</h3>
+                                    <ul class="spec-list">
+                                        <li>
+                                            <span class="spec-label">진입 보호</span>
+                                            <span class="spec-val">IP54</span>
+                                        </li>
+                                        <li>
+                                            <span class="spec-label">작동 온도.</span>
+                                            <span class="spec-val">-20°C에서 55°C</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                                
+                                <!-- 지형 감지 -->
+                                <div class="specs-column">
+                                    <h3 class="column-title">지형 감지</h3>
+                                    <ul class="spec-list">
+                                        <li>
+                                            <span class="spec-label">수평 시야</span>
+                                            <span class="spec-val">360°</span>
+                                        </li>
+                                        <li>
+                                            <span class="spec-label">분포</span>
+                                            <span class="spec-val">4 m (13피트)</span>
+                                        </li>
+                                        <li>
+                                            <span class="spec-label">조명</span>
+                                            <span class="spec-val">&gt; 2 럭스</span>
+                                        </li>
+                                        <li>
+                                            <span class="spec-label">충돌 회피</span>
+                                            <span class="spec-val">정지한 물체와의 일정 거리를 유지함</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                                
+                                <!-- 교통 -->
+                                <div class="specs-column">
+                                    <h3 class="column-title">교통</h3>
+                                    <ul class="spec-list">
+                                        <li>
+                                            <span class="spec-label">와이파이</span>
+                                            <span class="spec-val">2.4GHz / 5GHz b/g/n</span>
+                                        </li>
+                                        <li>
+                                            <span class="spec-label">이더넷</span>
+                                            <span class="spec-val">지원</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Tab 2: Battery & Payload -->
+                        <div class="spec-tab-content" id="battery-payload">
+                            <div class="specs-columns-half-grid">
+                                <!-- 배터리 -->
+                                <div class="specs-column">
+                                    <h3 class="column-title">배터리</h3>
+                                    <ul class="spec-list">
+                                        <li>
+                                            <span class="spec-label">배터리 용량</span>
+                                            <span class="spec-val">564 Wh</span>
+                                        </li>
+                                        <li>
+                                            <span class="spec-label">평균 러닝타임*</span>
+                                            <span class="spec-val">90분</span>
+                                        </li>
+                                        <li>
+                                            <span class="spec-label">대기 시간</span>
+                                            <span class="spec-val">180분</span>
+                                        </li>
+                                        <li>
+                                            <span class="spec-label">재충전 시간</span>
+                                            <span class="spec-val">60분</span>
+                                        </li>
+                                        <li>
+                                            <span class="spec-label">길이</span>
+                                            <span class="spec-val">324 mm (12.8 인치)</span>
+                                        </li>
+                                        <li>
+                                            <span class="spec-label">폭</span>
+                                            <span class="spec-val">168 mm (6.6 인치)</span>
+                                        </li>
+                                        <li>
+                                            <span class="spec-label">높이</span>
+                                            <span class="spec-val">93 mm (3.7인치)</span>
+                                        </li>
+                                        <li>
+                                            <span class="spec-label">질량/무게</span>
+                                            <span class="spec-val">5.2 kg (11.5 lbs)</span>
+                                        </li>
+                                    </ul>
+                                    <p class="spec-footnote">*실행 시간은 페이로드 및 환경 요인에 따라 달라질 수 있습니다</p>
+                                </div>
+                                
+                                <!-- 탑재 방식 -->
+                                <div class="specs-column">
+                                    <h3 class="column-title">탑재 방식</h3>
+                                    <ul class="spec-list">
+                                        <li>
+                                            <span class="spec-label">최대 중량</span>
+                                            <span class="spec-val">14kg (30.9파운드)</span>
+                                        </li>
+                                        <li>
+                                            <span class="spec-label">장착 구역</span>
+                                            <span class="spec-val">850 mm (L) x 240 mm (W) x 270 mm (H)</span>
+                                        </li>
+                                        <li>
+                                            <span class="spec-label">장착 인터페이스</span>
+                                            <span class="spec-val">M5 T-슬롯 레일</span>
+                                        </li>
+                                        <li>
+                                            <span class="spec-label">커넥터</span>
+                                            <span class="spec-val">DB25 (2포트)</span>
+                                        </li>
+                                        <li>
+                                            <span class="spec-label">전원 공급</span>
+                                            <span class="spec-val">비조절 DC 35-58.8V, 포트당 150W</span>
+                                        </li>
+                                        <li>
+                                            <span class="spec-label">통합</span>
+                                            <span class="spec-val">이용 가능한 소프트웨어 API 및 하드웨어 인터페이스 제어 문서</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 우측 로봇 이미지 고정 영역 -->
+                    <div class="specs-robot-visual">
+                        <img src="spot-specs-visual.jpg" alt="Spot Robot Specification" class="specs-robot-img hover-target">
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Scripts for animations -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 커서 효과 (index.html 재사용)
+            const cursor = document.querySelector('.cursor');
+            const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+            if (isTouchDevice && cursor) {
+                cursor.style.display = 'none';
+                document.body.style.cursor = 'auto';
+            } else if(cursor && typeof gsap !== 'undefined') {
+                let cursorInitialized = false;
+                document.addEventListener('mousemove', (e) => {
+                    if (!cursorInitialized) {
+                        gsap.set(cursor, { opacity: 1 });
+                        cursorInitialized = true;
+                    }
+                    gsap.to(cursor, {
+                        x: e.clientX,
+                        y: e.clientY,
+                        duration: 0.1,
+                        ease: "power2.out"
+                    });
+                });
+                document.querySelectorAll('.hover-target, a, button').forEach(el => {
+                    el.addEventListener('mouseenter', () => cursor.classList.add('active'));
+                    el.addEventListener('mouseleave', () => cursor.classList.remove('active'));
+                });
+            }
+
+            // Smooth Scroll (Lenis)
+            if (typeof Lenis !== 'undefined') {
+                const lenis = new Lenis({
+                    duration: 1.2,
+                    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+                    direction: 'vertical',
+                    gestureDirection: 'vertical',
+                    smooth: true,
+                    mouseMultiplier: 1,
+                    smoothTouch: false,
+                    touchMultiplier: 2,
+                });
+                function raf(time) {
+                    lenis.raf(time);
+                    requestAnimationFrame(raf);
+                }
+                requestAnimationFrame(raf);
+            }
+
+            // GSAP Animations
+            if(typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+                gsap.registerPlugin(ScrollTrigger);
+
+                // Hero Entrance
+                gsap.fromTo('.gs-reveal', 
+                    { y: 50, opacity: 0 },
+                    { y: 0, opacity: 1, duration: 1, stagger: 0.1, ease: 'power3.out' }
+                );
+
+                // 1. 핵심 기능 카드들 - 순차적(Stagger)으로 올라오기
+                gsap.fromTo('.features-grid .feature-card', 
+                    { y: 60, opacity: 0 },
+                    { 
+                        scrollTrigger: {
+                            trigger: '.features-grid',
+                            start: 'top 85%',
+                        },
+                        y: 0, 
+                        opacity: 1, 
+                        duration: 0.8, 
+                        stagger: 0.2, // 0.2초 간격으로 하나씩 순차적으로 동작
+                        ease: 'power3.out' 
+                    }
+                );
+
+                // 2. 스펙 섹션 전체 등장 애니메이션
+                gsap.fromTo('.spot-specs-section', 
+                    { opacity: 0, y: 50 },
+                    {
+                        scrollTrigger: {
+                            trigger: '.spot-specs-section',
+                            start: 'top 80%',
+                        },
+                        opacity: 1,
+                        y: 0,
+                        duration: 1,
+                        ease: 'power3.out'
+                    }
+                );
+
+                // 3. 기타 개별 gs-fade-up 요소 (섹션 타이틀 등)
+                gsap.utils.toArray('.gs-fade-up:not(.feature-card):not(.widget)').forEach(element => {
+                    gsap.fromTo(element, 
+                        { y: 50, opacity: 0 },
+                        { 
+                            scrollTrigger: {
+                                trigger: element,
+                                start: 'top 85%',
+                            },
+                            y: 0, 
+                            opacity: 1, 
+                            duration: 0.8, 
+                            ease: 'power3.out' 
+                        }
+                    );
+                });
+            }
+
+            // 스펙 시트 탭 전환 기능 (Tab Swapping Logic)
+            const tabs = document.querySelectorAll('.spec-tab-btn');
+            const contents = document.querySelectorAll('.spec-tab-content');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    contents.forEach(c => c.classList.remove('active'));
+
+                    tab.classList.add('active');
+                    const targetId = tab.getAttribute('data-tab');
+                    const targetContent = document.getElementById(targetId);
+                    
+                    if (targetContent) {
+                        targetContent.classList.add('active');
+                        // 탭 전환 시 콘텐츠가 부드럽게 나타나도록 GSAP 페이드인 연동
+                        gsap.fromTo(targetContent, 
+                            { opacity: 0, y: 15 },
+                            { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }
+                        );
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
