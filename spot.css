@@ -455,6 +455,7 @@ body.spot-page {
     .spot-hero-title { font-size: 2.5rem; }
     .spot-hero { padding: 6rem 2rem 3rem; }
     
+<<<<<<< HEAD
     /* Mobile Navigation Logo Left Alignment */
     .nav-brutal {
         padding: 1.2rem 1.5rem !important;
@@ -470,6 +471,8 @@ body.spot-page {
         height: auto !important;
     }
     
+=======
+>>>>>>> 696636c362e05a3df79e1b13f87390be88cc85a7
     /* Specs Mobile */
     .spot-specs-section { padding: 5rem 2rem; }
     .specs-columns { grid-template-columns: 1fr; }
