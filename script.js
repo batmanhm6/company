@@ -1,3 +1,65 @@
+// 새로고침 시 브라우저 기본 스크롤바 복원 점프 및 렌더링 꼬임(Jank) 예방을 위해 manual로 설정
+if (history.scrollRestoration) {
+    history.scrollRestoration = 'manual';
+}
+
+// --- Preloader Logic ---
+(function() {
+    const preloader = document.getElementById('preloader');
+    const progressBar = document.getElementById('progress-bar');
+    const loadingPercent = document.getElementById('loading-percent');
+    
+    if (preloader) {
+        // 새로고침 혹은 사이트 내 재방문(세션 유지 중)인지 체크
+        if (sessionStorage.getItem('hasSeenPreloader')) {
+            preloader.style.display = 'none';
+            return;
+        }
+
+        // 최초 접속 시 기록 남기기
+        sessionStorage.setItem('hasSeenPreloader', 'true');
+        
+        let progress = 0;
+        let isLoaded = false;
+        
+        // 프리로더 동작 중에는 스크롤 차단
+        document.body.style.overflow = 'hidden';
+        
+        // 가짜 진행률 시뮬레이션 (최대 90%까지만)
+        const progressInterval = setInterval(() => {
+            if (!isLoaded && progress < 90) {
+                progress += Math.random() * 8;
+                if (progress > 90) progress = 90;
+                updateProgress(progress);
+            }
+        }, 150);
+
+        function updateProgress(val) {
+            if (progressBar && loadingPercent) {
+                progressBar.style.width = `${val}%`;
+                loadingPercent.textContent = Math.floor(val);
+            }
+        }
+
+        // 모든 리소스 로딩 완료 시 100% 채우고 프리로더 제거
+        window.addEventListener('load', () => {
+            isLoaded = true;
+            clearInterval(progressInterval);
+            
+            setTimeout(() => {
+                updateProgress(100);
+                setTimeout(() => {
+                    preloader.classList.add('hidden');
+                    document.body.style.overflow = '';
+                    
+                    // 페이드아웃 후 완전히 DOM 공간에서 제거
+                    setTimeout(() => preloader.style.display = 'none', 800);
+                }, 500);
+            }, 100);
+        });
+    }
+})();
+
 // Initialize Lenis for Smooth Scrolling (CDN 미로드 대비 방어 장치 장착)
 let lenis;
 try {
@@ -50,7 +112,12 @@ try {
         cursor.style.display = 'none';
         document.body.style.cursor = 'auto';
     } else if (cursor && typeof gsap !== 'undefined') {
+        let cursorInitialized = false;
         document.addEventListener('mousemove', (e) => {
+            if (!cursorInitialized) {
+                gsap.set(cursor, { opacity: 1 });
+                cursorInitialized = true;
+            }
             gsap.to(cursor, {
                 x: e.clientX,
                 y: e.clientY,
@@ -119,22 +186,33 @@ try {
     console.warn("SPOT 애니메이션이 건너뛰어졌습니다:", error);
 }
 
-// STRETCH Horizontal Scroll
+// STRETCH Horizontal Scroll (Mobile Responsive Bypass via gsap.matchMedia)
 try {
     const stretchSection = document.querySelector('.stretch-section');
     const horizontalWrapper = document.querySelector('.horizontal-scroll-wrapper');
 
     if (stretchSection && horizontalWrapper && typeof gsap !== 'undefined') {
-        gsap.to(horizontalWrapper, {
-            xPercent: -50,
-            ease: "none",
-            scrollTrigger: {
-                trigger: stretchSection,
-                start: "top top",
-                end: "+=100%",
-                pin: true,
-                scrub: 1
-            }
+        let mm = gsap.matchMedia();
+
+        // 901px 이상 데스크톱 환경에서만 가로 스크롤 적용
+        mm.add("(min-width: 901px)", () => {
+            gsap.to(horizontalWrapper, {
+                xPercent: -50,
+                ease: "none",
+                scrollTrigger: {
+                    trigger: stretchSection,
+                    start: "top top",
+                    end: "+=100%",
+                    pin: true,
+                    scrub: 1,
+                    invalidateOnRefresh: true
+                }
+            });
+        });
+
+        // 900px 이하 모바일 환경에서는 스크롤 트리거 강제 정리 및 무력화
+        mm.add("(max-width: 900px)", () => {
+            gsap.set(horizontalWrapper, { clearProps: "all" });
         });
     }
 } catch (error) {
@@ -146,70 +224,70 @@ const dashboardData = {
     atlas: {
         manufacturing: {
             roi: 24, eff: 45, safe: 88, color: '#00d2ff',
-            caseTitle: "현대자동차 차세대 전동화 조립 자율화",
-            casePartner: "Hyundai Motors",
-            caseSolution: "전신 자율 제어 능력을 바탕으로 비정형 차체 조인트 및 호스를 파지하고 조립 공정에 자율 최적 배치하는 복합 제조 프로세스 대체.",
-            caseEffect: "조립 라인 고난도 수동 공정 완벽 자율 자동화 전환 및 생산 오차 극감"
+            caseTitle: "차세대 전동화 조립 자율화",
+            casePartner: "현대자동차",
+            caseSolution: "비정형 차체 조인트 및 호스 조립 공정의 완전 자율화",
+            caseEffect: "수동 공정 100% 무인화 및 생산 오차 극감"
         },
         logistics: {
             roi: 20, eff: 50, safe: 80, color: '#ff3366',
-            caseTitle: "BMW 그룹 대형 혼합 피킹 자율 최적화",
+            caseTitle: "대형 혼합 화물 피킹 자율화",
             casePartner: "BMW Group",
-            caseSolution: "인간과 유사한 이동성을 통해 물류 창고에서 비정형 대형 패키지 및 부품 박스(최대 25kg)를 인식 및 컨테이너 혼합 하중 적치 자율 조절.",
-            caseEffect: "혼합형 적재 피킹 속도 40% 증가 및 반복성 중량 노동 완전 대체"
+            caseSolution: "비정형 대형 패키지 인식 및 혼합 하중 적치 자동 조절",
+            caseEffect: "피킹 속도 40% 향상 및 중량 노동 대체"
         },
         energy: {
             roi: 30, eff: 40, safe: 95, color: '#f7d100',
-            caseTitle: "한화솔루션 극온도 가공 시설 자재 이관",
-            casePartner: "Hanwha Solution",
-            caseSolution: "고열 가온실 내부 등 유해 환경에서 실시간 기동 및 고정밀 매커니즘을 이용해 태양광 모듈 공급 및 응급 설비 오작동 조치 무인 수행.",
-            caseEffect: "초고온 위험 지역 무인화 100% 실현 및 설비 점검 중단 리스크 55% 감소"
+            caseTitle: "극온도 시설 무인 자재 이관",
+            casePartner: "한화솔루션",
+            caseSolution: "고열/극저온 유해 환경 내 응급 설비 점검 및 자재 무인 공급",
+            caseEffect: "위험 지역 완전 무인화 및 점검 중단 55% 감소"
         }
     },
     spot: {
         manufacturing: {
             roi: 12, eff: 30, safe: 90, color: '#00d2ff',
-            caseTitle: "삼성전자 반도체 클린룸 열화상 자동 진단",
-            casePartner: "Samsung Electronics",
-            caseSolution: "가스 누출 진단 페이로드와 고밀도 적외선 카메라를 장착하여 클린룸 내 초밀집 배관망을 따라 24시간 미세 이상 탐지 및 순찰 자동화.",
-            caseEffect: "초정밀 반도체 제조 기설 누수·열화 감지율 98% 달성으로 불시 중단 방지"
+            caseTitle: "반도체 클린룸 자동 진단",
+            casePartner: "삼성전자",
+            caseSolution: "열화상 및 가스 누출 탐지 센서를 활용한 24시간 순찰 자동화",
+            caseEffect: "초정밀 누수·열화 감지율 98% 달성 및 불시 중단 방지"
         },
         logistics: {
             roi: 10, eff: 25, safe: 85, color: '#ff3366',
-            caseTitle: "DHL 메가 허브 무인 야간 상시 재고 분석",
+            caseTitle: "메가 허브 야간 재고 분석",
             casePartner: "DHL Express",
-            caseSolution: "고성능 LiDAR 3D 맵핑 시스템을 활용하여 물류 창고의 입체 랙 사이를 자율 이동하며 불일치 바코드 감색 및 재고 실사 자동 파악.",
-            caseEffect: "수작업 실사 대기 시간 70% 단축 및 야간 무인 침입·화재 센싱 강화"
+            caseSolution: "LiDAR 3D 맵핑 기반 창고 내 자율 이동 및 재고 실사 자동화",
+            caseEffect: "실사 대기 시간 70% 단축 및 야간 무인 보안 강화"
         },
         energy: {
             roi: 14, eff: 35, safe: 99, color: '#f7d100',
-            caseTitle: "한국전력 고압 변전소 방폭 구역 초음파 감시",
-            casePartner: "KEPCO",
-            caseSolution: "자율 도킹 충전 스테이션과 연계하여 24시간 초음파 카메라로 고전원 방전 및 미세 절연 파괴 징후, 가스 누출 부위를 고정밀 자율 핀포인트 계측.",
-            caseEffect: "감전 및 아크 등 치명적인 전력 사고율 100% 예방 및 상시 원격 관리 실현"
+            caseTitle: "방폭 구역 초음파 감시",
+            casePartner: "한국전력",
+            caseSolution: "초음파 카메라를 통한 고전원 방전 및 가스 누출 핀포인트 자율 계측",
+            caseEffect: "치명적 전력 사고 100% 예방 및 상시 원격 관리"
         }
     },
     stretch: {
         manufacturing: {
             roi: 18, eff: 60, safe: 75, color: '#00d2ff',
-            caseTitle: "도요타 자동차 조립 라인 부품 고속 공급",
-            casePartner: "Toyota Motors",
-            caseSolution: "장중량 스마트 서보 흡착 어셈블리를 활용하여 부품 박스 트레이로부터 어셈블리 공급 컨베이어 벨트까지 고속 분류 자율 피딩.",
-            caseEffect: "라인 부품 공급 주기 시간 30% 감축 및 제조 리드타임 최적화 연계 달성"
+            caseTitle: "조립 라인 부품 고속 공급",
+            casePartner: "도요타 자동차",
+            caseSolution: "스마트 서보 흡착 어셈블리를 활용한 부품 고속 분류 및 자율 피딩",
+            caseEffect: "공급 주기 30% 감축 및 제조 리드타임 최적화"
         },
         logistics: {
             roi: 16, eff: 80, safe: 70, color: '#ff3366',
-            caseTitle: "CJ대한통운 메가 센터 수입 컨테이너 하역 자율화",
-            casePartner: "CJ Logistics",
-            caseSolution: "지능형 흡착 시스템과 패턴 AI 픽 비전을 이용하여 컨테이너 내부의 비규격 테트리스형 밀집 화물을 고속 무인 하역 프로세스로 연동.",
-            caseEffect: "수입 컨테이너 전면 하역 시간 50% 단축 및 하역 수작업 근로 부담 제로화"
+            caseTitle: "수입 컨테이너 하역 자율화",
+            casePartner: "CJ대한통운",
+            caseSolution: "지능형 픽 비전을 이용한 비규격 밀집 화물 고속 무인 하역",
+            caseEffect: "전면 하역 시간 50% 단축 및 하역 근로 부담 제로화"
         },
         energy: {
             roi: 22, eff: 45, safe: 85, color: '#f7d100',
-            caseTitle: "한국가스공사 LNG 보관창고 방폭 부품 고속 분류",
-            casePartner: "KOGAS",
-            caseSolution: "특화된 정밀 회전 암을 이용해 초저온 밸브 및 대형 배관 부품 적재함에서 고가 방폭 유지보수 기자재를 오차 없이 추출하여 자동 이송 연계.",
-            caseEffect: "자재 긴급 반출 및 물동 속도 60% 단축 및 안전 등급 특수창고 사고율 0%"
+            caseTitle: "방폭 기자재 고속 분류",
+            casePartner: "한국가스공사",
+            caseSolution: "정밀 회전 암을 이용해 특수 보관창고 내 초저온 밸브 등 자동 추출",
+            caseEffect: "긴급 반출 속도 60% 단축 및 특수창고 사고율 0%"
         }
     }
 };
@@ -253,19 +331,47 @@ function updateDashboard() {
     setTimeout(() => {
         simStatus.textContent = `${currentDevice.toUpperCase()} x ${currentIndustry.toUpperCase()} 자율 작업 최적화 완료`;
         
-        simCaseStudy.innerHTML = `
-            <div class="case-header">
-                <span class="case-title">${data.caseTitle}</span>
-                <span class="case-company-tag" style="border: 1px solid ${data.color}; color: ${data.color};">${data.casePartner}</span>
-            </div>
-            <div class="case-grid">
-                <div class="case-block">
-                    <span class="case-label">핵심 도입 솔루션</span>
-                    <span class="case-value">${data.caseSolution}</span>
+        // 도입 효과 문장 파싱 (' 및 ' 기준으로 분리)
+        const effects = data.caseEffect.split(' 및 ');
+        const effectsHtml = effects.map(effect => `
+            <div class="sleek-effect-card" style="border-left: 4px solid ${data.color};">
+                <div class="sleek-effect-icon" style="color: ${data.color};">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
                 </div>
-                <div class="case-metrics-brief" style="border-left: 3px solid ${data.color};">
-                    <span class="case-label">실제 도입 효과</span>
-                    <span class="case-value highlight" style="color: ${data.color};">${data.caseEffect}</span>
+                <span class="sleek-effect-text">${effect}</span>
+            </div>
+        `).join('');
+
+        simCaseStudy.style.setProperty('--brand-color', data.color);
+        simCaseStudy.style.setProperty('--brand-color-trans', `${data.color}15`);
+        simCaseStudy.style.setProperty('--brand-color-trans-alt', `${data.color}05`);
+
+        simCaseStudy.innerHTML = `
+            <div class="sleek-case-header">
+                <!-- 큼직하고 스타일리시한 파트너 브랜드 명칭 -->
+                <div class="sleek-case-partner-brand" style="color: ${data.color};">
+                    ${data.casePartner}
+                </div>
+                <h3 class="sleek-case-title">${data.caseTitle}</h3>
+            </div>
+            
+            <div class="sleek-case-body">
+                <div class="sleek-solution-box">
+                    <div class="sleek-label" style="color: ${data.color};">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+                        핵심 솔루션
+                    </div>
+                    <div class="sleek-solution-text">${data.caseSolution}</div>
+                </div>
+
+                <div class="sleek-effects-container">
+                    <div class="sleek-label" style="color: ${data.color};">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                        실제 도입 효과
+                    </div>
+                    <div class="sleek-effects-list">
+                        ${effectsHtml}
+                    </div>
                 </div>
             </div>
         `;
@@ -366,7 +472,9 @@ if (atlasVideo) {
     };
 
     const setStartTime = () => { 
-        atlasVideo.currentTime = 62; 
+        if (atlasVideo.duration > 62) {
+            atlasVideo.currentTime = 62; 
+        }
         forcePlayAtlas();
     };
 
@@ -384,8 +492,9 @@ if (atlasVideo) {
 // --- HERO LOCAL VIDEO BACKGROUND LOGIC ---
 const heroVideo = document.getElementById('hero-video');
 if (heroVideo) {
-    const startSec = 38.3; // 0:38.3
+    const startSec = 38.5; // 0:38.5
     const endSec = 108; // 1:48 (1분 48초)
+    let isSeeking = false;
     
     const forcePlayHero = () => {
         heroVideo.play().catch(err => {
@@ -395,11 +504,8 @@ if (heroVideo) {
         });
     };
 
-    // 비디오 로드 완료 시 초기 설정 (HTML 자체 미디어 프래그먼트 #t=38.3,108과의 더블 시킹 지연 제거)
+    // 비디오 로드 완료 시 초기 설정 (브라우저 자체 해시 로드 지원 활용)
     const initVideo = () => {
-        if (Math.abs(heroVideo.currentTime - startSec) > 2) {
-            heroVideo.currentTime = startSec;
-        }
         forcePlayHero();
     };
 
@@ -409,19 +515,35 @@ if (heroVideo) {
         heroVideo.addEventListener('loadedmetadata', initVideo);
     }
 
-    // timeupdate 이벤트를 통해 강제 구간 제어
+    // timeupdate의 빈도를 쓰로틀링(Throttling)하여 CPU 낭비를 막고 화면 버벅임 완전 박멸
+    let lastTimeUpdate = 0;
     heroVideo.addEventListener('timeupdate', () => {
-        // 구간을 벗어나면 무조건 시작점으로 되돌림
-        if (heroVideo.currentTime < startSec - 1 || heroVideo.currentTime >= endSec) {
+        const now = Date.now();
+        if (now - lastTimeUpdate < 250) return; // 250ms 간격으로만 시킹 판단 처리
+        lastTimeUpdate = now;
+
+        if (isSeeking) return;
+
+        // [핵심 필터]: 비디오가 로딩 상태이거나 시작점(0초)일 때는 브라우저 자체 해시 시킹을 위해 JS 제어를 건너뜀
+        if (heroVideo.currentTime === 0 || heroVideo.readyState < 2) return;
+
+        // 마진을 약간 넉넉하게(-3초) 두어 미세 버퍼링 시 무한 시킹 루프 방지
+        if (heroVideo.currentTime < startSec - 3 || heroVideo.currentTime >= endSec) {
+            isSeeking = true;
             heroVideo.currentTime = startSec;
             forcePlayHero();
+            setTimeout(() => { isSeeking = false; }, 500);
         }
     });
     
     // 만일 영상이 끝났을 경우에도 대비
     heroVideo.addEventListener('ended', () => {
-        heroVideo.currentTime = startSec;
-        forcePlayHero();
+        if (!isSeeking) {
+            isSeeking = true;
+            heroVideo.currentTime = startSec;
+            forcePlayHero();
+            setTimeout(() => { isSeeking = false; }, 500);
+        }
     });
 }
 
