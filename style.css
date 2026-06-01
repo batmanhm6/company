@@ -857,6 +857,7 @@ html.skip-preloader .preloader {
     padding: 1.3rem 2.8rem !important;
     text-transform: uppercase !important;
     text-decoration: none !important;
+    white-space: nowrap !important;
 }
 
 .btn-accent-yellow::before,
