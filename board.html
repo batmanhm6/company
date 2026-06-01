@@ -4,6 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Boston Dynamics - 라이브 커뮤니티 게시판</title>
+    
+    <!-- Preloader Session Check (Prevent Flash on Reload) -->
+    <script>
+        if (sessionStorage.getItem('hasSeenPreloader')) {
+            document.documentElement.classList.add('skip-preloader');
+        }
+    </script>
+    
     <!-- Preconnect for Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,6 +30,75 @@
             --accent-yellow: #f7d100;
             --accent-red: #ff4a4a;
             --font-main: 'Inter', 'Noto Sans KR', sans-serif;
+        }
+
+        /* Preloader */
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-color: var(--bg-color);
+            z-index: 99999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.8s;
+        }
+        /* Preloader Session Skip (Flash 차단) */
+        html.skip-preloader .preloader {
+            display: none !important;
+            opacity: 0 !important;
+            visibility: hidden !important;
+            pointer-events: none !important;
+        }
+        .preloader.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        .preloader-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 400px;
+            padding: 0 2rem;
+        }
+        .preloader-logo {
+            width: 250px;
+            height: 40px;
+            margin-bottom: 3rem;
+            animation: pulse 2s infinite ease-in-out;
+        }
+        .progress-bar-container {
+            width: 100%;
+            height: 4px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background-color: var(--accent-yellow);
+            transition: width 0.3s ease-out;
+        }
+        .loading-text {
+            font-family: var(--font-main);
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--accent-yellow);
+            letter-spacing: 2px;
+            text-align: center;
+        }
+        @keyframes pulse {
+            0% { opacity: 0.6; transform: scale(0.98); }
+            50% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0.6; transform: scale(0.98); }
         }
 
         * {
@@ -397,6 +474,8 @@
             display: flex;
             align-items: center;
             gap: 0.4rem;
+            white-space: nowrap; /* 글자가 깨져서 줄바꿈되지 않도록 보장 */
+            flex-shrink: 0;      /* 가로 폭 좁아져도 절대 찌그러지지 않음 */
         }
         .action-btn:hover {
             background: rgba(255, 255, 255, 0.05);
@@ -576,7 +655,7 @@
         .reply-content {
             font-size: 0.95rem;
             color: rgba(255, 255, 255, 0.8);
-            line-height: 1.5;
+            line-height: 1.65;
             word-break: break-all;
             white-space: pre-line;
         }
@@ -704,30 +783,225 @@
             user-select: none;
         }
 
+        /* Mobile Menu Toggle Button */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 30px;
+            height: 21px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            z-index: 1200;
+        }
+        .menu-toggle span {
+            display: block;
+            width: 100%;
+            height: 3px;
+            background-color: var(--text-primary);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .menu-toggle.active span:nth-child(1) {
+            transform: translateY(9px) rotate(45deg);
+            background-color: var(--accent-yellow);
+        }
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+        .menu-toggle.active span:nth-child(3) {
+            transform: translateY(-9px) rotate(-45deg);
+            background-color: var(--accent-yellow);
+        }
+
+        /* Mobile Menu Overlay */
+        .mobile-menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-color: rgba(5, 5, 5, 0.97);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 1100;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 2.5rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+        .mobile-menu-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .mobile-menu-links {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+        }
+        .mobile-menu-links a {
+            color: var(--text-primary);
+            font-size: 2rem;
+            font-weight: 900;
+            text-decoration: none;
+            letter-spacing: -1px;
+            transition: color 0.3s, transform 0.3s;
+            transform: translateY(20px);
+            opacity: 0;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .mobile-menu-overlay.active .mobile-menu-links a {
+            transform: translateY(0);
+            opacity: 1;
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease;
+        }
+        .mobile-menu-links a:hover {
+            color: var(--accent-yellow);
+        }
+
         /* Responsive */
         @media (max-width: 1024px) {
             .board-container {
                 grid-template-columns: 1fr;
-                gap: 3rem;
-                padding: 0 2rem;
+                gap: 2.5rem;
+                padding: 0 1.5rem;
+                margin-top: 110px;
             }
             .write-panel {
                 position: relative;
                 top: 0;
             }
+            .write-card {
+                padding: 2rem 1.5rem !important;
+            }
+            .panel-title {
+                font-size: 1.6rem;
+            }
             .nav-brutal {
-                padding: 0 2rem;
+                padding: 0 1.5rem;
+                height: 70px;
+            }
+            .bd-logo {
+                width: 180px !important;
+                height: 32px !important;
+            }
+            .bd-logo text {
+                font-size: 17px !important;
+            }
+            .back-home-btn {
+                display: none !important;
+            }
+            .menu-toggle {
+                display: flex;
             }
             .footer-compact {
                 flex-direction: column;
                 align-items: center;
                 text-align: center;
-                padding: 3rem 2rem;
+                padding: 3rem 1.5rem;
+                gap: 1.5rem;
+            }
+            .footer-policies {
+                gap: 1.5rem;
+                justify-content: center;
+            }
+            .post-card {
+                padding: 1.5rem !important;
+            }
+            .post-title {
+                font-size: 1.15rem;
+            }
+            .post-content {
+                font-size: 0.95rem;
+            }
+            .form-control {
+                padding: 0.85rem 1rem !important;
+            }
+        }
+
+        /* 스마트폰 소형 뷰포트에서 라이브 피드 버튼 밀림 완벽 방지 */
+        @media (max-width: 600px) {
+            .post-header {
+                align-items: center !important; /* 상하 정렬 라인을 맞춰 줄맞춤 및 균형 확보 */
+            }
+            .post-meta {
+                gap: 0.7rem !important;
+            }
+            .post-author {
+                font-size: 0.95rem !important;
+            }
+            .post-date {
+                font-size: 0.75rem !important;
+            }
+            .post-actions {
+                gap: 0.4rem !important;
+            }
+            .action-btn {
+                padding: 0.4rem 0.55rem !important; /* 콤팩트한 패딩으로 좌우 밀림 방지 */
+                font-size: 0.8rem !important;        /* 시인성이 뛰어난 모바일 가독 글꼴 크기 */
+                gap: 0.25rem !important;
+            }
+            .post-author-avatar {
+                width: 34px !important;
+                height: 34px !important;
+                font-size: 0.95rem !important;
+            }
+
+            /* 답글 입력 폼 모바일 적층형 레이아웃 전환 (텍스트 잘림 절대 방지) */
+            .reply-form {
+                padding: 1rem !important;
+            }
+            .reply-form-row {
+                grid-template-columns: 1fr !important; /* 가로 2칸 배치를 철폐하고 세로로 각각 100% 1줄씩 배치 */
+                gap: 0.6rem !important;
+            }
+            .reply-submit-row {
+                grid-template-columns: 1fr !important; /* 입력 인풋과 등록 버튼도 가로 정렬을 풀고 상하 배치 */
+                gap: 0.6rem !important;
+            }
+            .reply-submit-btn {
+                width: 100% !important; /* 등록 버튼 너비를 100%로 시원하게 확장 */
+                justify-content: center !important;
+                padding: 0.85rem !important; /* 터치가 편리한 최적화 높이 확보 */
+                height: 44px !important;
+            }
+            .reply-control {
+                padding: 0.85rem 1rem !important; /* 모바일 입력창 내부 여백 확충 */
+                font-size: 0.95rem !important;
+                height: 44px !important;
             }
         }
     </style>
 </head>
 <body>
+
+    <!-- Preloader -->
+    <div id="preloader" class="preloader">
+        <div class="preloader-content">
+            <svg viewBox="0 0 300 40" fill="none" xmlns="http://www.w3.org/2000/svg" class="preloader-logo">
+                <g fill="white">
+                    <path d="M10 24 L14 13 L26 13 L31 18 L28 22 L16 22 Z" />
+                    <path d="M27 22 L29 32 H27 L25 22 Z" />
+                    <path d="M24 22 L22 32 H20 L22 22 Z" opacity="0.6" />
+                    <path d="M16 22 L14 32 H12 L14 22 Z" />
+                    <path d="M13 22 L11 32 H9 L11 22 Z" opacity="0.6" />
+                    <circle cx="29" cy="16" r="1.5" fill="black" />
+                </g>
+                <text x="45" y="28" fill="white" font-family="'Noto Sans KR', sans-serif" font-weight="900" font-size="20" letter-spacing="-0.5">BOSTON DYNAMICS</text>
+            </svg>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+            <div class="loading-text">SYSTEM INITIALIZING... <span id="loading-percent">0</span>%</div>
+        </div>
+    </div>
 
     <!-- Header Navigation -->
     <nav class="nav-brutal">
@@ -747,7 +1021,22 @@
         <a href="index.html" class="back-home-btn">
             <i class="fa-solid fa-arrow-left"></i> 메인 홈으로 돌아가기
         </a>
+        <!-- Mobile Menu Toggle Button -->
+        <button class="menu-toggle" id="mobile-menu-toggle" aria-label="메뉴 열기">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
     </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay" id="mobile-menu-overlay">
+        <div class="mobile-menu-links">
+            <a href="index.html" class="mobile-menu-link"><i class="fa-solid fa-house"></i> 메인 홈으로 이동</a>
+            <a href="index.html#robots" class="mobile-menu-link"><i class="fa-solid fa-robot"></i> 로봇 제품군 보기</a>
+            <a href="index.html#dashboard" class="mobile-menu-link"><i class="fa-solid fa-chart-line"></i> ROI 대시보드</a>
+        </div>
+    </div>
 
     <!-- Main Container -->
     <main class="board-container">
@@ -1281,6 +1570,88 @@
                 }
             }
         };
+    </script>
+    
+    <!-- Mobile Hamburger Toggle Action for board.html -->
+    <script>
+        (function() {
+            var toggleBtn = document.getElementById('mobile-menu-toggle');
+            var menuOverlay = document.getElementById('mobile-menu-overlay');
+            var menuLinks = document.querySelectorAll('.mobile-menu-link');
+            
+            if (toggleBtn && menuOverlay) {
+                function toggleMenu() {
+                    toggleBtn.classList.toggle('active');
+                    menuOverlay.classList.toggle('active');
+                    
+                    if (menuOverlay.classList.contains('active')) {
+                        document.body.style.overflow = 'hidden';
+                    } else {
+                        document.body.style.overflow = '';
+                    }
+                }
+                
+                toggleBtn.onclick = function(e) {
+                    if (e && typeof e.stopPropagation === 'function') e.stopPropagation();
+                    toggleMenu();
+                };
+                
+                menuLinks.forEach(function(link) {
+                    link.onclick = function() {
+                        toggleMenu();
+                    };
+                });
+            }
+        })();
+
+        // Preloader Logic
+        (function() {
+            const preloader = document.getElementById('preloader');
+            const progressBar = document.getElementById('progress-bar');
+            const loadingPercent = document.getElementById('loading-percent');
+            
+            if (preloader) {
+                if (sessionStorage.getItem('hasSeenPreloader')) {
+                    preloader.style.display = 'none';
+                    return;
+                }
+                sessionStorage.setItem('hasSeenPreloader', 'true');
+
+                let progress = 0;
+                let isLoaded = false;
+                
+                document.body.style.overflow = 'hidden';
+                
+                const progressInterval = setInterval(() => {
+                    if (!isLoaded && progress < 90) {
+                        progress += Math.random() * 8;
+                        if (progress > 90) progress = 90;
+                        updateProgress(progress);
+                    }
+                }, 150);
+
+                function updateProgress(val) {
+                    if (progressBar && loadingPercent) {
+                        progressBar.style.width = `${val}%`;
+                        loadingPercent.textContent = Math.floor(val);
+                    }
+                }
+
+                window.addEventListener('load', () => {
+                    isLoaded = true;
+                    clearInterval(progressInterval);
+                    
+                    setTimeout(() => {
+                        updateProgress(100);
+                        setTimeout(() => {
+                            preloader.classList.add('hidden');
+                            document.body.style.overflow = '';
+                            setTimeout(() => preloader.style.display = 'none', 800);
+                        }, 500);
+                    }, 100);
+                });
+            }
+        })();
     </script>
 </body>
 </html>
